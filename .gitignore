@@ -1,0 +1,29 @@
+# Data files (regenerable from code)
+data/raw/
+data/processed/
+
+# Trained models and run artifacts
+*.pkl
+*.pt
+*.ckpt
+models/
+mlruns/
+wandb/
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
