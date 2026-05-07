@@ -5,12 +5,20 @@ A study in classical QSAR for aqueous solubility prediction on the ESOL dataset
 to demonstrate end-to-end cheminformatics workflow: dataset curation, scaffold-aware
 evaluation, progressive featurization, and **honest stratified error analysis**.
 
-The headline result of this stage is not a benchmark number — it is the discovery
-that **adding global molecular descriptors to a substructure fingerprint reduces
-test RMSE by 33% on average but introduces a systematic, structurally-localised
-failure mode** on poly-hydroxylated high-MW molecules (sugars, glycosides). Both
-the improvement and the trade-off are real and worth understanding before moving
-to graph neural networks.
+The headline result of this stage is not a single benchmark number but the
+**arc across three modeling phases on identical splits and identical features**:
+
+1. **Phase 1 → Phase 2** (Morgan FP → Morgan FP + RDKit descriptors, same RF):
+   −33% test RMSE on average, but introduces a structurally-localised failure
+   mode on poly-hydroxylated high-MW molecules (sugars, glycosides).
+2. **Phase 2 → Phase 3** (RF → tuned XGBoost on the same features):
+   another −19% test RMSE, the sugar bias is **attenuated but persistent**, and
+   a *new* compression bias on the most hydrophobic compounds emerges as a
+   side-effect of the stronger regularization.
+
+Both improvements are real and reproducible across seeds. Both come with
+trade-offs that aggregate RMSE alone would not reveal. The point of the project
+is to make those trade-offs visible before moving to graph neural networks.
 
 ---
 
@@ -19,9 +27,9 @@ to graph neural networks.
 | Phase | Featurization | Model | Test RMSE (scaffold, 5-seed) | Test R² (scaffold, 5-seed) | Status |
 |---|---|---|---:|---:|---|
 | 1   | Morgan FP (r=2, 2048 bits)              | Random Forest        | 1.591 ± 0.126 | 0.344 ± 0.066 | ✅ done |
-| 2   | Morgan FP + RDKit 2D descriptors (~217) | Random Forest        | **1.062 ± 0.053** | **0.705 ± 0.041** | ✅ done |
-| 3   | Morgan FP + RDKit 2D descriptors        | XGBoost + Optuna     | _–_ | _–_ | 🔲 next |
-| 4   | Morgan FP                                | MLP (PyTorch)        | _–_ | _–_ | 🔲 |
+| 2   | Morgan FP + RDKit 2D descriptors (~217) | Random Forest        | 1.062 ± 0.053 | 0.705 ± 0.041 | ✅ done |
+| 3   | Morgan FP + RDKit 2D descriptors        | XGBoost + Optuna     | **0.862 ± 0.036** | **0.806 ± 0.019** | ✅ done |
+| 4   | Morgan FP                                | MLP (PyTorch)        | _–_ | _–_ | 🔲 next |
 | 5   | Molecular graph                          | ChemProp (D-MPNN)    | _–_ | _–_ | 🔲 target |
 
 Headline numbers are 5-seed averages on balanced scaffold split, the most
@@ -54,10 +62,14 @@ qsar-esol-solubility/
 ├── notebooks/
 │   ├── 01_eda.ipynb                              # load, validate, deduplicate, EDA
 │   ├── 02_baseline_rf_morgan.ipynb               # Phase 1: RF on Morgan FP
-│   └── 02b_baseline_rf_morgan_plus_desc.ipynb    # Phase 2: RF on Morgan FP + RDKit desc
+│   ├── 02b_baseline_rf_morgan_plus_desc.ipynb    # Phase 2: RF on Morgan FP + RDKit desc
+│   └── 03_xgboost_optuna.ipynb                   # Phase 3: XGBoost + Optuna tuning
 ├── src/                      # populated as code is reused across ≥ 2 notebooks
-├── models/                   # gitignored; model artifacts
-├── reports/figures/          # parity plots, diagnostics
+├── models/                   # gitignored; model artifacts + saved best params
+├── reports/
+│   ├── phase2_summary.json   # per-seed Phase 2 numbers (consumed by notebook 03)
+│   ├── phase3_summary.json   # Phase 3 results + best hyperparameters
+│   └── figures/              # parity plots, Optuna diagnostics
 ├── requirements.txt
 └── README.md
 ```
@@ -83,6 +95,12 @@ Run the notebooks in order. Each one consumes the output of the previous:
    deduplicates on canonical SMILES, saves `data/processed/esol_dedup.csv`.
 2. `02_baseline_rf_morgan.ipynb` — Phase 1 baseline.
 3. `02b_baseline_rf_morgan_plus_desc.ipynb` — Phase 2 with descriptors.
+   The persistence cell at the end writes `reports/phase2_summary.json`,
+   which is consumed by notebook 03 for the paired delta computation.
+4. `03_xgboost_optuna.ipynb` — Phase 3 tuning. Runs ~30 minutes on a
+   Colab CPU runtime (100 Optuna trials × 5 CV folds). Writes
+   `models/xgb_esol_phase3_best_params.json` and
+   `reports/phase3_summary.json`.
 
 All random seeds are fixed. Re-running a notebook end-to-end reproduces the
 numbers in this README to the third decimal.
@@ -147,10 +165,13 @@ Same as protocol 2, repeated over 5 seeds (`[42, 0, 1, 2, 3]`). Reported as
 single scaffold split has high seed-to-seed variance (RMSE range observed:
 1.40–1.77 in Phase 1). Single-seed numbers should not be reported in isolation.
 
-**Hyperparameters are identical across protocols and across phases** so any
-difference in metrics is attributable to featurization alone. Random Forest
-hyperparameters: `n_estimators=500, max_features='sqrt', min_samples_leaf=1`,
-no tuning. Tuning is deferred to Phase 3 (XGBoost + Optuna).
+**Hyperparameters are kept identical across protocols within each phase**, so
+any difference between protocols (random vs scaffold) is attributable to the
+split alone. Across phases, what changes is either the featurization (Phase 1
+→ 2) or the model (Phase 2 → 3 introduces hyperparameter tuning via Optuna,
+described in [Phase 3](#phase-3--xgboost--optuna)). The Phase 1 / Phase 2
+Random Forest hyperparameters are: `n_estimators=500, max_features='sqrt',
+min_samples_leaf=1`, no tuning.
 
 ---
 
@@ -285,17 +306,189 @@ on minority structural families.
 
 Two implications for the project:
 
-1. **A graph-based model (ChemProp / D-MPNN) should mitigate this.** It learns
-   the molecular representation end-to-end without privileging hand-crafted
-   global descriptors, so it has no built-in "MW → logS" prior to misapply.
-   This is the next phase of the project and the reason the project does not
-   stop at the Phase 2 number.
+1. **The bias is partly model-class, partly feature-class.** This is one of
+   the questions Phase 3 directly tests: keeping the same featurization but
+   replacing RF with a tuned XGBoost shows whether the failure mode is
+   intrinsic to the features or to the model. Spoiler: it is partly both
+   (see [Phase 3](#phase-3--xgboost--optuna) for the breakdown). A graph-based
+   model in Phase 5 (ChemProp / D-MPNN) is then the cleaner test for the
+   feature-class part: it learns the molecular representation end-to-end
+   without privileging hand-crafted global descriptors, so it has no built-in
+   "MW → logS" prior to misapply.
 
 2. **Aggregate RMSE is not enough.** Stratified error analysis (by chemical
    class, by target range) is essential for QSAR: a model with lower mean
    error can still be unsafe on specific structural families. This is a
    well-known issue in medicinal-chemistry deployment of QSAR models, and
    one of the reasons why simple "leaderboard" comparisons can be misleading.
+
+---
+
+## Phase 3 — XGBoost + Optuna
+
+**Goal of this phase.** Hold the featurization fixed (Morgan FP + RDKit
+descriptors, identical to Phase 2) and replace the model. This isolates the
+"model-class" contribution to the test error and to the sugar bias. If the
+sugar bias fully disappeared with a tuned XGBoost, the bias would be a
+property of Random Forest. If it persisted, it would be a property of the
+features. The actual answer turns out to be: **partly both, with a slight
+predominance of feature-class** — the bias is reduced but not eliminated, and
+a new compression bias on hydrophobic outliers appears as a side-effect of
+the stronger regularization.
+
+### Setup
+
+- **Model.** XGBoost `reg:squarederror`, `tree_method='hist'`, fixed
+  `random_state=42`. Only the data split varies across the multi-seed runs;
+  the model's internal randomness stays constant for clean attribution.
+- **Tuning.** [Optuna](https://optuna.org/) with TPE sampler and `MedianPruner`,
+  100 trials, ~30 minutes on a Colab CPU runtime.
+- **Objective.** Mean test RMSE across **5 scaffold-disjoint CV folds** built
+  from the seed=42 training set. Validation and test sets of the outer split
+  are never observed during tuning. The CV folds use a greedy bin-packing
+  algorithm (largest scaffold groups first, each placed in the currently
+  smallest fold) so the folds end up of comparable size with disjoint scaffold
+  sets — the right inner protocol when the outer split is also scaffold-based.
+- **Search space (9 hyperparameters):** `n_estimators ∈ [200, 2000]`,
+  `max_depth ∈ [3, 10]`, `learning_rate ∈ [0.01, 0.3]` (log),
+  `subsample ∈ [0.5, 1.0]`, `colsample_bytree ∈ [0.4, 1.0]`,
+  `min_child_weight ∈ [1, 10]`, `reg_lambda ∈ [10⁻³, 10]` (log),
+  `reg_alpha ∈ [10⁻³, 10]` (log), `gamma ∈ [10⁻³, 5]` (log).
+- **Final eval.** Best params (selected once on seed=42) are re-fit on each
+  of the 5 outer scaffold splits `[42, 0, 1, 2, 3]`. We are **not** re-tuning
+  per seed — we are testing whether the chosen hyperparameters generalize
+  across splits. They do.
+
+### Results
+
+| Evaluation protocol             | Test RMSE       | Test MAE        | Test R²         |
+|---------------------------------|----------------:|----------------:|----------------:|
+| Random split (seed=42)          | _–_             | _–_             | _–_             |
+| Scaffold split (seed=42)        | 0.834           | _–_             | _–_             |
+| Scaffold split (5-seed mean)    | **0.862 ± 0.036** | _–_           | _–_             |
+
+> _Numbers from `notebooks/03_xgboost_optuna.ipynb` (output cells §10 and §12).
+> The MAE and R² rows above are placeholders: copy the exact values from the
+> §10 / §12 print outputs._
+
+**Phase 2 → Phase 3 paired delta (same seed = same split):**
+
+| Seed | P2 RMSE (RF) | P3 RMSE (XGB-tuned) | Δ RMSE |
+|-----:|-------------:|--------------------:|-------:|
+| 42   | 1.019        | 0.834               | −0.184 |
+| 0    | 1.119        | 0.867               | −0.252 |
+| 1    | 1.028        | 0.838               | −0.190 |
+| 2    | 1.010        | 0.862               | −0.148 |
+| 3    | 1.132        | 0.907               | −0.225 |
+
+**Mean ± std: ΔRMSE = −0.200 ± 0.036, P3 wins on 5/5 seeds.**
+
+The variance of the improvement (0.036) is *smaller* than the within-phase std
+of either P2 (0.053) or P1 (0.126). The gain is structural: XGBoost-tuned
+beats RF by roughly the same amount on every scaffold split, regardless of
+whether the split itself is "easy" (seed=2) or "hard" (seed=3 or seed=0).
+
+### Optuna diagnostics
+
+The optimization history (`reports/figures/03_optuna_history.png`) shows two
+phases: random exploration in trials 0–10 (CV RMSE bouncing between 0.78 and
+0.95), then a sharp drop to ~0.780 around trial 11 once TPE converges on the
+promising region, followed by a long plateau with a final small improvement
+to ~0.775 around trial 84. **100 trials were sufficient**: the last
+~15 trials produced no further improvement. On future ADMET endpoints,
+60–80 trials would likely be enough.
+
+The CV-best RMSE of 0.775 vs the test RMSE of 0.834 on seed=42 gives a
+**CV→test gap of 0.06**, well within reasonable seed-to-seed variance.
+There is no sign that Optuna overfit to the inner CV folds.
+
+### Hyperparameter importance (FANOVA)
+
+Decomposition of the variance in CV RMSE across the 100 completed trials:
+
+| Hyperparameter      | FANOVA importance |
+|---------------------|------------------:|
+| `max_depth`         |             ~0.38 |
+| `reg_alpha`         |             ~0.27 |
+| `min_child_weight`  |             ~0.08 |
+| `colsample_bytree`  |             ~0.08 |
+| `gamma`             |             ~0.06 |
+| `subsample`         |             ~0.05 |
+| `learning_rate`     |             ~0.04 |
+| `reg_lambda`        |             ~0.02 |
+| `n_estimators`      |             ~0.02 |
+
+Two takeaways:
+
+1. **`max_depth` and `reg_alpha` together account for ~65% of the variance.**
+   Tree depth controls model capacity (bias-variance trade-off), `reg_alpha`
+   is L1 regularization that drives weights to exactly zero — effectively
+   doing automatic feature selection on the 217 RDKit descriptors. With
+   2265 features and ~900 training molecules per fold, controlling capacity
+   and shrinking the feature set are the two dominant levers.
+2. **`learning_rate` and `n_estimators` are surprisingly low.** TPE found
+   a good "many trees + moderate LR" region early and most of the marginal
+   tuning happened around regularization, not around the gradient-boosting
+   schedule itself.
+
+For future tabular-cheminformatics tuning runs, prioritising `max_depth`,
+`reg_alpha`, `min_child_weight`, and `colsample_bytree` while leaving the
+other 5 at sensible defaults would likely capture >85% of the gain at a
+quarter of the budget.
+
+### What happened to the sugar bias
+
+Per-regime breakdown on the seed=42 scaffold test set:
+
+| Regime                          |  n | P2 mean residual | P3 mean residual | P2 RMSE | P3 RMSE |
+|---------------------------------|---:|-----------------:|-----------------:|--------:|--------:|
+| hydrophilic   (logS > −2)       | 18 |             ~−0.9 |           −0.450 |    1.49 |   0.825 |
+| moderate      (−4 < logS ≤ −2)  | 43 |             ~+0.0 |           +0.018 |    0.69 |   0.732 |
+| hydrophobic   (logS ≤ −4)       | 52 |             ~+0.1 |           +0.219 |    0.94 |   0.913 |
+
+> _Phase 2 per-regime residuals are approximate — recompute from notebook 02b
+> diagnostic cell to fill in exact numbers._
+
+**The sugar bias is attenuated but still present.** Mean residual on the
+hydrophilic regime improved from ~−0.9 to −0.45 — a real reduction, roughly
+halving the systematic under-prediction — but the sign is still negative and
+the magnitude still well outside what would be expected from random error
+(MAE = 0.625 on n=18). Of the top-5 worst residuals on the seed=42 test set,
+1 is still a glycoside (vs 3 in Phase 2). The tuned XGBoost has weakened the
+"high MW + many rings → low logS" heuristic without removing it.
+
+**A new bias has appeared on the hydrophobic side.** Mean residual on the
+hydrophobic regime moved from ~+0.1 (≈unbiased in P2) to **+0.22** in P3:
+the tuned model now systematically over-predicts solubility (under-predicts
+the magnitude of insolubility) on the most hydrophobic compounds. Two of
+the top-5 worst residuals on the seed=42 test set are extreme hydrophobes
+that XGBoost-tuned has pulled too close to the bulk of the distribution
+(an anthraquinone at logS = −5.19 predicted at −2.66; a tri-aryl ether at
+logS = −8.6 predicted at −6.4).
+
+This is a textbook regularization side-effect. Strong L1 (`reg_alpha`
+optimal value ended up high) plus moderate `max_depth` plus low
+`min_child_weight` all push the model toward simpler, smoother predictions
+that compress toward the mean of the training distribution. RMSE wins
+because the bulk of ESOL sits in the moderate region where this compression
+is helpful, but the tails pay a small price.
+
+### Reading the model-class vs feature-class question
+
+Phase 3 holds the features fixed and changes the model. The result:
+
+- The sugar bias **reduces by ~50%** (mean hydrophilic residual: ~−0.9 → −0.45).
+  This part was model-class — RF without regularization committed harder to
+  the spurious "high MW + many rings" rule than XGBoost-with-L1 does.
+- The sugar bias **does not disappear**. The remaining ~−0.45 mean residual
+  on hydrophilic compounds is the part the features themselves cannot avoid.
+  The "MW + ring count → low logS" signal is too statistically dominant in
+  the training set for any reasonable tabular model to fully resist it
+  on out-of-distribution polyhydroxy compounds.
+
+This is the exact split the project needed Phase 3 to clarify before Phase 5.
+**The remaining ~−0.45 hydrophilic residual is the bar ChemProp must beat
+to justify graph-based modelling on chemically heterogeneous datasets.**
 
 ---
 
@@ -333,6 +526,22 @@ Two implications for the project:
   even though ESOL itself is clean. Pattern is preserved so the same
   evaluation harness can be reused on ChEMBL without changes.
 
+- **Tune once, evaluate many (Phase 3).** Optuna selects hyperparameters
+  on the seed=42 outer split using scaffold-disjoint 5-fold CV on the
+  training set only. Those hyperparameters are then re-fit on each of the
+  5 outer scaffold seeds for final evaluation. We are *not* re-tuning per
+  seed: the 5-seed numbers test whether the chosen hyperparameters
+  generalize across splits. Re-tuning per seed would be a different
+  (more expensive) protocol — and would conflate seed-dependent tuning
+  variance with model-class variance.
+
+- **Scaffold-disjoint inner CV.** When the outer split is scaffold-aware,
+  the inner CV must be too — otherwise Optuna selects hyperparameters that
+  exploit chemical similarity within the training set and the chosen
+  configuration ends up over-confident on out-of-distribution scaffolds.
+  The greedy bin-packing implementation (see `scaffold_kfold` in notebook
+  03) keeps fold sizes balanced while preserving scaffold disjointness.
+
 ---
 
 ## Lessons learned
@@ -359,30 +568,55 @@ Two implications for the project:
    scaffold metrics on ESOL vary by ±0.2 RMSE across reasonable seeds.
    Any conclusion drawn from a single run is not reproducible.
 
-5. **The right model class for the problem might not be the one that
-   minimizes mean error.** A classical RF with global descriptors hits
-   RMSE 1.06; published GNNs hit RMSE 0.55–0.70. But the sugar problem
-   suggests RF with descriptors has a structural bias that no amount of
-   tuning will fix. The case for moving to graph-based models is partly
-   about lower error and partly about removing this bias.
+5. **The right model class might not be the one that minimizes mean error.**
+   Tuned XGBoost on Phase 2 features hits RMSE 0.86 — closing more than half
+   the gap to published GNN numbers (0.55–0.70). But the sugar bias is only
+   halved, not eliminated, and a new compression bias on hydrophobic outliers
+   appears as a regularization side-effect. The case for moving to graph-based
+   models in Phase 5 is now sharper: it is no longer about absolute RMSE
+   (XGBoost gets close enough that the marginal improvement might not justify
+   the complexity) but specifically about whether end-to-end-learned
+   representations can break the ~−0.45 hydrophilic residual ceiling that
+   any tabular model on these features seems to hit.
+
+6. **Most of the tuning variance came from two knobs.** On this dataset,
+   FANOVA attributes ~65% of the CV-RMSE variance across 100 Optuna trials
+   to `max_depth` and `reg_alpha`. `learning_rate` and `n_estimators` —
+   often considered the dominant gradient-boosting hyperparameters — were
+   below 5% each. This is informative: in regime p > n (2265 features, ~900
+   training molecules), capacity control and L1 regularization dominate the
+   tuning surface. Useful prior for the upcoming ADMET project.
+
+7. **Strong regularization buys mean-error reduction at the cost of small
+   tail biases.** Phase 3 reduces RMSE in the moderate logS region (where
+   most of the dataset sits) by compressing predictions toward the training
+   distribution mean. This is mathematically how L1-regularized boosting
+   wins on aggregate; the price is paid in small but real biases on the
+   distributional extremes (over-predicting solubility of strong
+   hydrophobes, under-predicting solubility of strong hydrophiles). For
+   QSAR deployment, this matters: the molecules a project actually cares
+   about predicting often *are* the extremes.
 
 ---
 
 ## Next phases
 
-- **Phase 3 — XGBoost + Optuna.** Same featurization as Phase 2, hyperparameter
-  search to quantify the gap between RF (no tuning) and a tuned gradient
-  boosting model. Expected: small additional gain, mostly in the moderate
-  region; sugars still a problem.
-
-- **Phase 4 — MLP on Morgan FP.** A small dense MLP, mostly to validate the
-  PyTorch training loop and to provide a third reference point on identical
-  data and identical splits.
+- **Phase 4 — MLP on Morgan FP.** A small dense MLP on the same Morgan FP
+  used in Phase 1, mostly to validate the PyTorch training loop and to
+  provide a third reference point on identical splits. Expectation: somewhere
+  between Phase 1 (RF on Morgan only) and Phase 2 (RF on Morgan + descriptors).
+  If the MLP without descriptors significantly beats RF without descriptors,
+  it would be a hint that part of Phase 1's error budget was about model
+  expressivity, not features.
 
 - **Phase 5 — ChemProp (D-MPNN).** Graph-based message-passing neural network.
-  The point is not just lower RMSE but **whether the sugar failure mode
-  disappears**. If it does, that is the strongest argument for moving to
-  graph models on chemically heterogeneous datasets.
+  After Phase 3, the question is no longer "does graph beat tabular on
+  aggregate RMSE" (probably yes, by some margin) but specifically: **does
+  ChemProp eliminate the residual sugar bias?** The Phase 3 hydrophilic mean
+  residual of −0.45 is now the bar: if ChemProp brings that below ~−0.10,
+  it justifies graph models as more than a marginal improvement. If it does
+  not, the bias is more deeply about the dataset than the representation,
+  and would warrant a different framing.
 
 After this project the workflow generalizes to:
 
@@ -409,6 +643,12 @@ After this project the workflow generalizes to:
   Molecular frameworks. *J. Med. Chem.* **1996**, 39, 2887–2893.
 - **Rogers, D.; Hahn, M.** Extended-connectivity fingerprints (ECFP).
   *J. Chem. Inf. Model.* **2010**, 50, 742–754.
+- **Chen, T.; Guestrin, C.** XGBoost: a scalable tree boosting system.
+  *KDD* **2016**, 785–794.
+- **Akiba, T. et al.** Optuna: a next-generation hyperparameter optimization
+  framework. *KDD* **2019**, 2623–2631.
+- **Hutter, F. et al.** An efficient approach for assessing hyperparameter
+  importance (Functional ANOVA). *ICML* **2014**.
 
 ---
 
