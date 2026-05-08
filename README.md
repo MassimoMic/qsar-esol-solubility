@@ -28,7 +28,7 @@ is to make those trade-offs visible before moving to graph neural networks.
 |---|---|---|---:|---:|---|
 | 1   | Morgan FP (r=2, 2048 bits)              | Random Forest        | 1.591 ± 0.126 | 0.344 ± 0.066 | ✅ done |
 | 2   | Morgan FP + RDKit 2D descriptors (~217) | Random Forest        | 1.062 ± 0.053 | 0.705 ± 0.041 | ✅ done |
-| 3   | Morgan FP + RDKit 2D descriptors        | XGBoost + Optuna     | **0.862 ± 0.036** | **0.806 ± 0.019** | ✅ done |
+| 3   | Morgan FP + RDKit 2D descriptors        | XGBoost + Optuna     | **0.862 ± 0.026** | **0.807 ± 0.017** | ✅ done |
 | 4   | Morgan FP                                | MLP (PyTorch)        | _–_ | _–_ | 🔲 next |
 | 5   | Molecular graph                          | ChemProp (D-MPNN)    | _–_ | _–_ | 🔲 target |
 
@@ -265,8 +265,11 @@ reveals two distinct error regimes.
 | moderate (−4 ≤ logS < −2)        | ~50 |    ~1.0 |    ~0.7 | −0.3   | yes     |
 | hydrophilic (logS ≥ −2)          | ~30 |    ~1.0 |    ~1.5 | **+0.5** | **NO** |
 
-(Numbers approximate; exact values in notebook 02b. The pattern is what
-matters here.)
+(Numbers approximate; this 4-bucket stratification was used for an early
+qualitative sanity-check. The canonical 3-regime stratification used from
+Phase 3 onward — and the bucket boundaries the project context now anchors
+to — is the one in the [Phase 3 sugar-bias section](#what-happened-to-the-sugar-bias),
+where exact P2 vs P3 per-regime numbers are tabulated.)
 
 **Phase 2 wins on 70/113 molecules (62%)** of the test set on scaffold seed=42.
 The remaining 38% — where Phase 2 is *strictly worse* than Phase 1 —
@@ -363,13 +366,15 @@ the stronger regularization.
 
 | Evaluation protocol             | Test RMSE       | Test MAE        | Test R²         |
 |---------------------------------|----------------:|----------------:|----------------:|
-| Random split (seed=42)          | _–_             | _–_             | _–_             |
-| Scaffold split (seed=42)        | 0.834           | _–_             | _–_             |
-| Scaffold split (5-seed mean)    | **0.862 ± 0.036** | _–_           | _–_             |
+| Random split (seed=42)          | 0.550           | 0.392           | 0.936           |
+| Scaffold split (seed=42)        | 0.834           | 0.644           | 0.807           |
+| Scaffold split (5-seed mean)    | **0.862 ± 0.026** | **0.657 ± 0.023** | **0.807 ± 0.017** |
 
-> _Numbers from `notebooks/03_xgboost_optuna.ipynb` (output cells §10 and §12).
-> The MAE and R² rows above are placeholders: copy the exact values from the
-> §10 / §12 print outputs._
+> _All numbers from `notebooks/03_xgboost_optuna.ipynb` (output cells §9 for
+> seed=42, §10 for the 5-seed aggregate). The 5-seed std on RMSE is 0.026 (raw
+> across-split variance); the std on the **paired** P2→P3 delta below is 0.036
+> — a different quantity, and tighter because most of the split-induced
+> variance cancels._
 
 **Phase 2 → Phase 3 paired delta (same seed = same split):**
 
@@ -442,52 +447,71 @@ Per-regime breakdown on the seed=42 scaffold test set:
 
 | Regime                          |  n | P2 mean residual | P3 mean residual | P2 RMSE | P3 RMSE |
 |---------------------------------|---:|-----------------:|-----------------:|--------:|--------:|
-| hydrophilic   (logS > −2)       | 18 |             ~−0.9 |           −0.450 |    1.49 |   0.825 |
-| moderate      (−4 < logS ≤ −2)  | 43 |             ~+0.0 |           +0.018 |    0.69 |   0.732 |
-| hydrophobic   (logS ≤ −4)       | 52 |             ~+0.1 |           +0.219 |    0.94 |   0.913 |
+| hydrophilic   (logS > −2)       | 18 |           −1.123 |           −0.450 |   1.670 |   0.825 |
+| moderate      (−4 < logS ≤ −2)  | 43 |           −0.347 |           +0.018 |   0.788 |   0.732 |
+| hydrophobic   (logS ≤ −4)       | 52 |           +0.498 |           +0.219 |   0.880 |   0.913 |
 
-> _Phase 2 per-regime residuals are approximate — recompute from notebook 02b
-> diagnostic cell to fill in exact numbers._
+> _P2 numbers from `notebooks/02b_baseline_rf_morgan_plus_desc.ipynb`
+> per-regime diagnostic cell (seed=42, scaffold balanced split). P3 numbers
+> from `notebooks/03_xgboost_optuna.ipynb` §11. Sign convention: residual =
+> pred − true; negative ⇒ model under-predicts solubility._
 
 **The sugar bias is attenuated but still present.** Mean residual on the
-hydrophilic regime improved from ~−0.9 to −0.45 — a real reduction, roughly
-halving the systematic under-prediction — but the sign is still negative and
-the magnitude still well outside what would be expected from random error
-(MAE = 0.625 on n=18). Of the top-5 worst residuals on the seed=42 test set,
-1 is still a glycoside (vs 3 in Phase 2). The tuned XGBoost has weakened the
+hydrophilic regime improved from −1.123 to −0.450 — a 60% reduction in
+systematic under-prediction. The sign is still negative and the magnitude
+still well outside what would be expected from random error (MAE = 0.625
+on n=18). Of the top-5 worst residuals on the seed=42 test set, 1 is
+still a glycoside (vs 3 in Phase 2). The tuned XGBoost has weakened the
 "high MW + many rings → low logS" heuristic without removing it.
 
-**A new bias has appeared on the hydrophobic side.** Mean residual on the
-hydrophobic regime moved from ~+0.1 (≈unbiased in P2) to **+0.22** in P3:
-the tuned model now systematically over-predicts solubility (under-predicts
-the magnitude of insolubility) on the most hydrophobic compounds. Two of
-the top-5 worst residuals on the seed=42 test set are extreme hydrophobes
-that XGBoost-tuned has pulled too close to the bulk of the distribution
-(an anthraquinone at logS = −5.19 predicted at −2.66; a tri-aryl ether at
-logS = −8.6 predicted at −6.4).
+**The hydrophobic bias was already there in Phase 2 — and Phase 3 reduced
+it.** Mean residual on the hydrophobic regime moved from +0.498 in P2 to
++0.219 in P3: both models systematically *over*-predict solubility (i.e.
+under-predict the magnitude of insolubility) on the most hydrophobic
+compounds, but P3 does so less. This was easy to mis-read as "P3
+introduces a new compression bias" — the project context originally
+recorded P2 hydrophobic residual as ~+0.1, which would have made +0.22 in
+P3 look like a regression. The exact numbers reverse the picture: the
+compression-toward-the-bulk pattern is intrinsic to *both* model classes
+on this featurization, and tuned XGBoost is the one that compresses *less*.
 
-This is a textbook regularization side-effect. Strong L1 (`reg_alpha`
-optimal value ended up high) plus moderate `max_depth` plus low
-`min_child_weight` all push the model toward simpler, smoother predictions
-that compress toward the mean of the training distribution. RMSE wins
-because the bulk of ESOL sits in the moderate region where this compression
-is helpful, but the tails pay a small price.
+The pattern is symmetric and informative:
+
+| Regime         | P2 mean_resid | P3 mean_resid | |P2| − |P3| |
+|----------------|--------------:|--------------:|------------:|
+| hydrophilic    |       −1.123  |       −0.450  |     +0.673  |
+| moderate       |       −0.347  |       +0.018  |     +0.329  |
+| hydrophobic    |       +0.498  |       +0.219  |     +0.279  |
+
+P3 reduces the absolute mean residual on **all three** regimes, by the
+largest amount on the hardest regime (hydrophilic). This is consistent
+with regularization shrinking variance without introducing new structural
+bias: the residual signs are unchanged, the magnitudes are uniformly
+smaller. The "compression toward the training mean" narrative still
+applies — the bulk of ESOL sits between −4 and −2, and both models pull
+predictions toward that range — but it is a property of the
+fingerprint+descriptor representation, not specifically of L1 regularization.
+
+A useful corrective for future ADMET work: **don't read a per-regime
+residual in isolation, always read it as a delta between the two models
+being compared.** A +0.22 residual in P3 looked alarming next to a ~+0.1
+estimate for P2; next to the actual +0.50 in P2, it is a 56% improvement.
 
 ### Reading the model-class vs feature-class question
 
 Phase 3 holds the features fixed and changes the model. The result:
 
-- The sugar bias **reduces by ~50%** (mean hydrophilic residual: ~−0.9 → −0.45).
+- The sugar bias **reduces by 60%** (mean hydrophilic residual: −1.123 → −0.450).
   This part was model-class — RF without regularization committed harder to
   the spurious "high MW + many rings" rule than XGBoost-with-L1 does.
-- The sugar bias **does not disappear**. The remaining ~−0.45 mean residual
+- The sugar bias **does not disappear**. The remaining −0.45 mean residual
   on hydrophilic compounds is the part the features themselves cannot avoid.
   The "MW + ring count → low logS" signal is too statistically dominant in
   the training set for any reasonable tabular model to fully resist it
   on out-of-distribution polyhydroxy compounds.
 
 This is the exact split the project needed Phase 3 to clarify before Phase 5.
-**The remaining ~−0.45 hydrophilic residual is the bar ChemProp must beat
+**The remaining −0.45 hydrophilic residual is the bar ChemProp must beat
 to justify graph-based modelling on chemically heterogeneous datasets.**
 
 ---
