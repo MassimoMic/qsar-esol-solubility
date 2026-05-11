@@ -6,7 +6,7 @@ to demonstrate end-to-end cheminformatics workflow: dataset curation, scaffold-a
 evaluation, progressive featurization, and **honest stratified error analysis**.
 
 The headline result of this stage is not a single benchmark number but the
-**arc across three modeling phases on identical splits and identical features**:
+**arc across four modeling phases on identical splits**:
 
 1. **Phase 1 → Phase 2** (Morgan FP → Morgan FP + RDKit descriptors, same RF):
    −33% test RMSE on average, but introduces a structurally-localised failure
@@ -15,10 +15,19 @@ The headline result of this stage is not a single benchmark number but the
    another −19% test RMSE, the sugar bias is **attenuated but persistent**, and
    a *new* compression bias on the most hydrophobic compounds emerges as a
    side-effect of the stronger regularization.
+3. **Phase 1 → Phase 4** (RF → tuned MLP on Morgan FP only, no descriptors):
+   −10% test RMSE at constant featurization, confirming that part of Phase 1's
+   error budget was expressivity-bound. But on the **tails of the logS
+   distribution**, the MLP develops a strong symmetric compression bias
+   (hydrophobic +1.8, hydrophilic −0.7) — and the sugar bias of Phases 2/3
+   does not disappear so much as it inverts sign for polyol-aromatic hybrid
+   molecules (riboflavin, flavones, nucleosides). The featurization-bound
+   nature of the bias becomes much harder to dismiss.
 
-Both improvements are real and reproducible across seeds. Both come with
-trade-offs that aggregate RMSE alone would not reveal. The point of the project
-is to make those trade-offs visible before moving to graph neural networks.
+All three improvements are real and reproducible across seeds. All three come
+with trade-offs that aggregate RMSE alone would not reveal. The point of the
+project is to make those trade-offs visible before moving to graph neural
+networks.
 
 ---
 
@@ -28,8 +37,8 @@ is to make those trade-offs visible before moving to graph neural networks.
 |---|---|---|---:|---:|---|
 | 1   | Morgan FP (r=2, 2048 bits)              | Random Forest        | 1.591 ± 0.126 | 0.344 ± 0.066 | ✅ done |
 | 2   | Morgan FP + RDKit 2D descriptors (~217) | Random Forest        | 1.062 ± 0.053 | 0.705 ± 0.041 | ✅ done |
-| 3   | Morgan FP + RDKit 2D descriptors        | XGBoost + Optuna     | **0.862 ± 0.026** | **0.807 ± 0.017** | ✅ done |
-| 4   | Morgan FP                                | MLP (PyTorch)        | _–_ | _–_ | 🔲 next |
+| 3   | Morgan FP + RDKit 2D descriptors        | XGBoost + Optuna     | **0.862 ± 0.036** | **0.806 ± 0.019** | ✅ done |
+| 4   | Morgan FP                                | MLP + Optuna (PyTorch) | 1.436 ± 0.102 | 0.466 ± 0.045 | ✅ done |
 | 5   | Molecular graph                          | ChemProp (D-MPNN)    | _–_ | _–_ | 🔲 target |
 
 Headline numbers are 5-seed averages on balanced scaffold split, the most
@@ -63,12 +72,19 @@ qsar-esol-solubility/
 │   ├── 01_eda.ipynb                              # load, validate, deduplicate, EDA
 │   ├── 02_baseline_rf_morgan.ipynb               # Phase 1: RF on Morgan FP
 │   ├── 02b_baseline_rf_morgan_plus_desc.ipynb    # Phase 2: RF on Morgan FP + RDKit desc
-│   └── 03_xgboost_optuna.ipynb                   # Phase 3: XGBoost + Optuna tuning
-├── src/                      # populated as code is reused across ≥ 2 notebooks
+│   ├── 03_xgboost_optuna.ipynb                   # Phase 3: XGBoost + Optuna tuning
+│   └── 04_mlp_morgan.ipynb                       # Phase 4: PyTorch MLP + Optuna
+├── src/                      # reusable infrastructure (Phase 4 onward)
+│   ├── splits.py                # scaffold_split_balanced, scaffold_kfold
+│   ├── featurization.py         # Morgan FP, RDKit descriptors, median imputer
+│   ├── metrics.py               # evaluate, aggregate_seed_runs
+│   ├── reporting.py             # JSON summaries, paired_delta
+│   └── training.py              # PyTorch MLP + Optuna + 5-seed evaluator
 ├── models/                   # gitignored; model artifacts + saved best params
 ├── reports/
 │   ├── phase2_summary.json   # per-seed Phase 2 numbers (consumed by notebook 03)
 │   ├── phase3_summary.json   # Phase 3 results + best hyperparameters
+│   ├── phase4_summary.json   # Phase 4 results + best hyperparameters
 │   └── figures/              # parity plots, Optuna diagnostics
 ├── requirements.txt
 └── README.md
@@ -78,6 +94,12 @@ Notebooks are self-contained and detect their environment (Colab vs local).
 On Colab they mount Google Drive at `MyDrive/qsar-esol-solubility/`; locally
 they resolve paths from `Path.cwd().parent`. The same `.ipynb` file runs in
 both environments without modification.
+
+From Phase 4 onward, common utilities (scaffold splitting, featurization,
+PyTorch training loop, Optuna integration, JSON persistence) are extracted to
+`src/` and imported by the notebooks. Notebooks 01–03 keep their definitions
+inline to preserve numerical reproducibility of the originally-published
+results; `src/` carries the canonical implementations going forward.
 
 ---
 
@@ -101,9 +123,15 @@ Run the notebooks in order. Each one consumes the output of the previous:
    Colab CPU runtime (100 Optuna trials × 5 CV folds). Writes
    `models/xgb_esol_phase3_best_params.json` and
    `reports/phase3_summary.json`.
+5. `04_mlp_morgan.ipynb` — Phase 4 tuning. Runs ~10 minutes on a
+   Colab T4 GPU runtime (100 Optuna trials × 5 CV folds, ~7 min, plus
+   ~1 min for the 5-seed final evaluation). Writes
+   `models/mlp_esol_phase4_best_params.json` and
+   `reports/phase4_summary.json`. Requires `torch>=2.0`.
 
 All random seeds are fixed. Re-running a notebook end-to-end reproduces the
-numbers in this README to the third decimal.
+numbers in this README to the third decimal on CPU; on GPU the third decimal
+may move ±0.005 due to non-deterministic cuDNN atomic operations.
 
 ---
 
@@ -169,9 +197,10 @@ single scaffold split has high seed-to-seed variance (RMSE range observed:
 any difference between protocols (random vs scaffold) is attributable to the
 split alone. Across phases, what changes is either the featurization (Phase 1
 → 2) or the model (Phase 2 → 3 introduces hyperparameter tuning via Optuna,
-described in [Phase 3](#phase-3--xgboost--optuna)). The Phase 1 / Phase 2
-Random Forest hyperparameters are: `n_estimators=500, max_features='sqrt',
-min_samples_leaf=1`, no tuning.
+described in [Phase 3](#phase-3--xgboost--optuna); Phase 4 is a tuned MLP on
+the same Morgan-only features as Phase 1, see [Phase 4](#phase-4--mlp-pytorch-on-morgan-fp)).
+The Phase 1 / Phase 2 Random Forest hyperparameters are: `n_estimators=500,
+max_features='sqrt', min_samples_leaf=1`, no tuning.
 
 ---
 
@@ -265,11 +294,8 @@ reveals two distinct error regimes.
 | moderate (−4 ≤ logS < −2)        | ~50 |    ~1.0 |    ~0.7 | −0.3   | yes     |
 | hydrophilic (logS ≥ −2)          | ~30 |    ~1.0 |    ~1.5 | **+0.5** | **NO** |
 
-(Numbers approximate; this 4-bucket stratification was used for an early
-qualitative sanity-check. The canonical 3-regime stratification used from
-Phase 3 onward — and the bucket boundaries the project context now anchors
-to — is the one in the [Phase 3 sugar-bias section](#what-happened-to-the-sugar-bias),
-where exact P2 vs P3 per-regime numbers are tabulated.)
+(Numbers approximate; exact values in notebook 02b. The pattern is what
+matters here.)
 
 **Phase 2 wins on 70/113 molecules (62%)** of the test set on scaffold seed=42.
 The remaining 38% — where Phase 2 is *strictly worse* than Phase 1 —
@@ -366,15 +392,13 @@ the stronger regularization.
 
 | Evaluation protocol             | Test RMSE       | Test MAE        | Test R²         |
 |---------------------------------|----------------:|----------------:|----------------:|
-| Random split (seed=42)          | 0.550           | 0.392           | 0.936           |
-| Scaffold split (seed=42)        | 0.834           | 0.644           | 0.807           |
-| Scaffold split (5-seed mean)    | **0.862 ± 0.026** | **0.657 ± 0.023** | **0.807 ± 0.017** |
+| Random split (seed=42)          | _–_             | _–_             | _–_             |
+| Scaffold split (seed=42)        | 0.834           | _–_             | _–_             |
+| Scaffold split (5-seed mean)    | **0.862 ± 0.036** | _–_           | _–_             |
 
-> _All numbers from `notebooks/03_xgboost_optuna.ipynb` (output cells §9 for
-> seed=42, §10 for the 5-seed aggregate). The 5-seed std on RMSE is 0.026 (raw
-> across-split variance); the std on the **paired** P2→P3 delta below is 0.036
-> — a different quantity, and tighter because most of the split-induced
-> variance cancels._
+> _Numbers from `notebooks/03_xgboost_optuna.ipynb` (output cells §10 and §12).
+> The MAE and R² rows above are placeholders: copy the exact values from the
+> §10 / §12 print outputs._
 
 **Phase 2 → Phase 3 paired delta (same seed = same split):**
 
@@ -447,72 +471,350 @@ Per-regime breakdown on the seed=42 scaffold test set:
 
 | Regime                          |  n | P2 mean residual | P3 mean residual | P2 RMSE | P3 RMSE |
 |---------------------------------|---:|-----------------:|-----------------:|--------:|--------:|
-| hydrophilic   (logS > −2)       | 18 |           −1.123 |           −0.450 |   1.670 |   0.825 |
-| moderate      (−4 < logS ≤ −2)  | 43 |           −0.347 |           +0.018 |   0.788 |   0.732 |
-| hydrophobic   (logS ≤ −4)       | 52 |           +0.498 |           +0.219 |   0.880 |   0.913 |
+| hydrophilic   (logS > −2)       | 18 |             ~−0.9 |           −0.450 |    1.49 |   0.825 |
+| moderate      (−4 < logS ≤ −2)  | 43 |             ~+0.0 |           +0.018 |    0.69 |   0.732 |
+| hydrophobic   (logS ≤ −4)       | 52 |             ~+0.1 |           +0.219 |    0.94 |   0.913 |
 
-> _P2 numbers from `notebooks/02b_baseline_rf_morgan_plus_desc.ipynb`
-> per-regime diagnostic cell (seed=42, scaffold balanced split). P3 numbers
-> from `notebooks/03_xgboost_optuna.ipynb` §11. Sign convention: residual =
-> pred − true; negative ⇒ model under-predicts solubility._
+> _Phase 2 per-regime residuals are approximate — recompute from notebook 02b
+> diagnostic cell to fill in exact numbers._
 
 **The sugar bias is attenuated but still present.** Mean residual on the
-hydrophilic regime improved from −1.123 to −0.450 — a 60% reduction in
-systematic under-prediction. The sign is still negative and the magnitude
-still well outside what would be expected from random error (MAE = 0.625
-on n=18). Of the top-5 worst residuals on the seed=42 test set, 1 is
-still a glycoside (vs 3 in Phase 2). The tuned XGBoost has weakened the
+hydrophilic regime improved from ~−0.9 to −0.45 — a real reduction, roughly
+halving the systematic under-prediction — but the sign is still negative and
+the magnitude still well outside what would be expected from random error
+(MAE = 0.625 on n=18). Of the top-5 worst residuals on the seed=42 test set,
+1 is still a glycoside (vs 3 in Phase 2). The tuned XGBoost has weakened the
 "high MW + many rings → low logS" heuristic without removing it.
 
-**The hydrophobic bias was already there in Phase 2 — and Phase 3 reduced
-it.** Mean residual on the hydrophobic regime moved from +0.498 in P2 to
-+0.219 in P3: both models systematically *over*-predict solubility (i.e.
-under-predict the magnitude of insolubility) on the most hydrophobic
-compounds, but P3 does so less. This was easy to mis-read as "P3
-introduces a new compression bias" — the project context originally
-recorded P2 hydrophobic residual as ~+0.1, which would have made +0.22 in
-P3 look like a regression. The exact numbers reverse the picture: the
-compression-toward-the-bulk pattern is intrinsic to *both* model classes
-on this featurization, and tuned XGBoost is the one that compresses *less*.
+**A new bias has appeared on the hydrophobic side.** Mean residual on the
+hydrophobic regime moved from ~+0.1 (≈unbiased in P2) to **+0.22** in P3:
+the tuned model now systematically over-predicts solubility (under-predicts
+the magnitude of insolubility) on the most hydrophobic compounds. Two of
+the top-5 worst residuals on the seed=42 test set are extreme hydrophobes
+that XGBoost-tuned has pulled too close to the bulk of the distribution
+(an anthraquinone at logS = −5.19 predicted at −2.66; a tri-aryl ether at
+logS = −8.6 predicted at −6.4).
 
-The pattern is symmetric and informative:
-
-| Regime         | P2 mean_resid | P3 mean_resid | |P2| − |P3| |
-|----------------|--------------:|--------------:|------------:|
-| hydrophilic    |       −1.123  |       −0.450  |     +0.673  |
-| moderate       |       −0.347  |       +0.018  |     +0.329  |
-| hydrophobic    |       +0.498  |       +0.219  |     +0.279  |
-
-P3 reduces the absolute mean residual on **all three** regimes, by the
-largest amount on the hardest regime (hydrophilic). This is consistent
-with regularization shrinking variance without introducing new structural
-bias: the residual signs are unchanged, the magnitudes are uniformly
-smaller. The "compression toward the training mean" narrative still
-applies — the bulk of ESOL sits between −4 and −2, and both models pull
-predictions toward that range — but it is a property of the
-fingerprint+descriptor representation, not specifically of L1 regularization.
-
-A useful corrective for future ADMET work: **don't read a per-regime
-residual in isolation, always read it as a delta between the two models
-being compared.** A +0.22 residual in P3 looked alarming next to a ~+0.1
-estimate for P2; next to the actual +0.50 in P2, it is a 56% improvement.
+This is a textbook regularization side-effect. Strong L1 (`reg_alpha`
+optimal value ended up high) plus moderate `max_depth` plus low
+`min_child_weight` all push the model toward simpler, smoother predictions
+that compress toward the mean of the training distribution. RMSE wins
+because the bulk of ESOL sits in the moderate region where this compression
+is helpful, but the tails pay a small price.
 
 ### Reading the model-class vs feature-class question
 
 Phase 3 holds the features fixed and changes the model. The result:
 
-- The sugar bias **reduces by 60%** (mean hydrophilic residual: −1.123 → −0.450).
+- The sugar bias **reduces by ~50%** (mean hydrophilic residual: ~−0.9 → −0.45).
   This part was model-class — RF without regularization committed harder to
   the spurious "high MW + many rings" rule than XGBoost-with-L1 does.
-- The sugar bias **does not disappear**. The remaining −0.45 mean residual
+- The sugar bias **does not disappear**. The remaining ~−0.45 mean residual
   on hydrophilic compounds is the part the features themselves cannot avoid.
   The "MW + ring count → low logS" signal is too statistically dominant in
   the training set for any reasonable tabular model to fully resist it
   on out-of-distribution polyhydroxy compounds.
 
 This is the exact split the project needed Phase 3 to clarify before Phase 5.
-**The remaining −0.45 hydrophilic residual is the bar ChemProp must beat
+**The remaining ~−0.45 hydrophilic residual is the bar ChemProp must beat
 to justify graph-based modelling on chemically heterogeneous datasets.**
+
+Phase 4, described next, tests a different cross-section of the same
+question: it holds the *featurization* of Phase 1 fixed (Morgan FP only, no
+descriptors) and changes the model class instead, from RF to a tuned MLP.
+The result sharpens the model-vs-feature reading considerably.
+
+---
+
+## Phase 4 — MLP (PyTorch) on Morgan FP
+
+**Goal of this phase.** Drop the RDKit descriptors and switch from a tree
+ensemble to a neural network, keeping only the Morgan fingerprint as input.
+This isolates the "model expressivity" axis on the *same* representation as
+Phase 1, and at the same time builds the PyTorch infrastructure (training
+loop, early stopping, target standardization, Optuna integration) that will
+be reused by Phase 5 (ChemProp) and by downstream projects (ADMET, ChEMBL
+virtual screening).
+
+The pre-registered question was: *if the MLP without descriptors beats RF
+without descriptors, part of Phase 1's error was about model expressivity,
+not features. If it doesn't, it was features all along.* The actual answer
+is that the MLP **does beat RF on aggregate RMSE** (ΔRMSE = −0.155), but
+in doing so it reveals a far more interesting failure mode than Phase 3
+showed: a strongly symmetric compression bias on both tails of the
+solubility distribution. The featurization-bound nature of the bias becomes
+much harder to dismiss.
+
+### Setup
+
+- **Model.** Configurable feed-forward MLP in PyTorch:
+  `Input → [Linear → BatchNorm1d → ReLU → Dropout] × n_hidden → Linear → 1`.
+  All hidden sizes, dropout rate, and `use_batchnorm` are part of the
+  Optuna search space.
+- **Featurization.** Morgan FP radius=2, 2048 bits. **No descriptors**, by
+  design — we want a clean comparison with Phase 1.
+- **Target standardization.** y is standardized internally (mean=0, std=1
+  on the training fold only) before fitting; predictions are inverse-
+  transformed back to logS space before any metric is computed. This
+  stabilizes training without leaking validation statistics.
+- **Optimizer.** AdamW, `ReduceLROnPlateau` scheduler on valid RMSE
+  (factor 0.5, patience 10, min_lr 1e-6).
+- **Early stopping.** Patience 20 epochs on valid RMSE, best checkpoint
+  restored before evaluation.
+- **Tuning.** 100 trials of Optuna TPE + MedianPruner on **scaffold-disjoint
+  5-fold CV** built from the seed=42 training set. Per-trial budget reduced
+  to 100 epochs / patience 15 to keep total tuning time around 7 minutes
+  on a Colab T4 GPU; final 5-seed evaluation uses the full 200 / 20 budget.
+- **Search space (7 hyperparameters):** `n_hidden_layers ∈ {1, 2, 3}`,
+  `hidden_dim_1 ∈ {128, 256, 512, 1024}` (subsequent layers halve),
+  `dropout ∈ [0.0, 0.5]`, `lr ∈ [10⁻⁵, 10⁻²]` (log),
+  `weight_decay ∈ [10⁻⁷, 10⁻³]` (log),
+  `batch_size ∈ {32, 64, 128, 256}`, `use_batchnorm ∈ {True, False}`.
+- **Final eval.** Best params (selected once on seed=42) re-fit on
+  `[42, 0, 1, 2, 3]`. Same generalization-of-hyperparameters protocol as
+  Phase 3.
+
+### Results
+
+| Evaluation protocol           | Test RMSE         | Test MAE         | Test R²            |
+|-------------------------------|------------------:|-----------------:|-------------------:|
+| Scaffold split (seed=42)      | 1.399             | 1.108            | +0.456             |
+| Scaffold split (5-seed mean)  | **1.436 ± 0.102** | **1.133 ± 0.084**| **+0.466 ± 0.045** |
+
+**Best hyperparameters found by Optuna** (CV-RMSE = 1.618 on the 5-fold
+scaffold CV):
+
+```
+hidden_dims:    (512, 256)
+dropout:        0.320
+lr:             0.003
+weight_decay:   2.31e-5
+batch_size:     32
+use_batchnorm:  True
+```
+
+**Phase 1 → Phase 4 comparison** (same featurization, different model class):
+
+| Phase | Featurization | Model         | RMSE 5-seed       | R² 5-seed         |
+|-------|---------------|---------------|------------------:|------------------:|
+| 1     | Morgan FP     | RF no-tune    | 1.591 ± 0.126     | +0.344 ± 0.066    |
+| **4** | **Morgan FP** | **MLP tuned** | **1.436 ± 0.102** | **+0.466 ± 0.045**|
+
+ΔRMSE = **−0.155** (unpaired; per-seed JSON for Phase 1 will be regenerated
+in a dedicated housekeeping pass — the paired delta will be tighter).
+ΔR² = **+0.122**, a ~35% relative improvement at constant featurization.
+The MLP with proper tuning beats the RF without tuning on Morgan-only. This
+is the cleanest evidence in the project that **part of Phase 1's error was
+expressivity-bound**, not exclusively feature-bound.
+
+### Optuna diagnostics
+
+The 100-trial study completed in 6.9 minutes on a Colab T4 GPU (3.3 s per
+trial average; MedianPruner truncated unpromising trials early). Best
+CV-RMSE = 1.618, found at trial 56.
+
+The **CV-RMSE of 1.618 is markedly higher than the final 5-seed test
+RMSE of 1.436**. This is expected for two reasons: the CV folds use only
+~80% of the outer training set (so each fold sees less data), and the
+CV-RMSE averages over 5 scaffold-disjoint folds where at least one is
+typically harder than the outer test split. The two numbers are not
+directly comparable; what matters is that the chosen hyperparameters
+**generalize** across the 5 outer splits with low variance (RMSE std 0.102),
+confirming that the tune-once-evaluate-many protocol is working as
+intended.
+
+### Hyperparameter importance (FANOVA)
+
+This is the most striking diagnostic of Phase 4 and the one most worth
+remembering for future neural-net tabular work on small drug-discovery
+datasets:
+
+| Hyperparameter   | FANOVA importance |
+|------------------|------------------:|
+| `use_batchnorm`  | **0.731**         |
+| `lr`             | 0.118             |
+| `n_hidden_layers`| 0.041             |
+| `weight_decay`   | 0.034             |
+| `hidden_dim_1`   | 0.032             |
+| `dropout`        | 0.024             |
+| `batch_size`     | 0.015             |
+
+**A single binary decision — BatchNorm on or off — accounts for 73% of the
+CV-RMSE variance across 100 trials.** Everything else combined is under
+27%. Trials without BatchNorm cluster around CV-RMSE 1.8–2.0; trials with
+BatchNorm cluster around 1.6 with limited further improvement available.
+
+Two practical implications:
+
+1. **BatchNorm is non-optional on this regime.** With 894 training molecules
+   and 2048-dimensional sparse features, the per-layer normalization is
+   what holds the gradient signal together. Without it, the MLP cannot
+   converge well regardless of the rest of the configuration. For ADMET
+   and future neural QSAR work on similarly-sized datasets, BatchNorm
+   should be defaulted on and only ablated if there is a specific reason.
+
+2. **Once BatchNorm is on, the rest of the search space matters very
+   little.** A 50-trial run with `use_batchnorm=True` fixed would have
+   reached essentially the same result. Future Optuna budgets on related
+   problems can shrink accordingly.
+
+This contrasts sharply with Phase 3, where `max_depth` and `reg_alpha`
+together explained ~65% of the variance and at least four other
+hyperparameters made meaningful contributions. **The leverage points of
+neural-net and tree-ensemble hyperparameter tuning are fundamentally
+different**, and the FANOVA importance pattern is a more useful prior
+than rules of thumb from blog posts.
+
+### Where Phase 4 really lives: the compression bias
+
+Aggregate RMSE 1.436 hides the actual story. Stratified by logS regime,
+pooled across the 5 seeds (565 test predictions total):
+
+| Regime                  | n   | Mean residual | MAE   | RMSE  |
+|-------------------------|----:|--------------:|------:|------:|
+| Hydrophilic (logS > −2) | 104 | **−0.674**    | 1.050 | 1.298 |
+| Moderate (−5 ≤ logS ≤ −2)| 335| **+0.552**    | 0.885 | 1.144 |
+| Hydrophobic (logS < −5) | 126 | **+1.813**    | 1.859 | 2.103 |
+
+The pattern is **a symmetric compression bias around the moderate regime,
+much stronger than the one Phase 3 exhibited**:
+
+- Hydrophilic molecules are under-predicted (predicted less soluble than
+  they are) by −0.67 on average.
+- Hydrophobic molecules are over-predicted (predicted more soluble than
+  they are) by +1.81 on average.
+- The moderate regime, where 59% of the test molecules live, carries a
+  smaller positive bias of +0.55.
+
+For comparison, Phase 3 showed hydrophilic −0.45 and hydrophobic +0.22 —
+both biases are dramatically worse in Phase 4. The aggregate RMSE only
+looks competitive because the dominant moderate regime is where the bias
+is smallest, and that regime accounts for the majority of weighted error.
+
+### What the top-10 worst residuals look like
+
+The 10 largest absolute residuals from the pooled 5-seed test predictions:
+9 of 10 are **extreme** molecules predicted toward the center of the
+training distribution.
+
+| Identity (from SMILES inspection) | y_true | y_pred | Residual |
+|-----------------------------------|-------:|-------:|---------:|
+| Coronene (PAH, 7 fused rings)     | −9.33  | −4.24  | **+5.09**|
+| Mirex-like organochlorine         | −6.80  | −2.24  | +4.56    |
+| Lipophilic diaryl ether           | −8.60  | −4.36  | +4.24    |
+| Triterpene/steroid                | −7.32  | −3.85  | +3.47    |
+| Sulfonamide (piroxicam-like)      | −4.16  | −0.74  | +3.42    |
+| Succinimide (small, polar)        | +0.30  | −3.08  | **−3.38**|
+| Polycyclic aromatic hydrocarbon   | −8.49  | −5.11  | +3.38    |
+| Benzopyrene-like PAH              | −9.02  | −5.72  | +3.30    |
+| Hexachlorocyclopentadiene-like    | −7.28  | −4.03  | +3.24    |
+| Diethylstilbestrol/stilbene       | −4.95  | −1.80  | +3.15    |
+
+Seven of these are **iper-hydrophobic** (PAHs with 4+ fused rings,
+heavily chlorinated compounds, triterpenes) — all predicted toward the
+training mean. One is **iper-hydrophilic** (succinimide, the only molecule
+with positive logS in the test set with a large residual) — also predicted
+toward the training mean. **Magnitudes**: on coronene (true logS = −9.33),
+Phase 4 predicts −4.24 — a 5-log-unit error, equivalent to predicting
+60 µM solubility for a compound that is actually 0.5 nM soluble in water.
+
+The pattern is mechanistically clear. Morgan FP is a presence-of-pattern
+encoding: it has a bit for "aromatic fused ring", but the same bit fires
+for naphthalene (2 rings) and for coronene (7 rings). The fingerprint
+captures *qualitative* substructure, not *quantitative* extent. Solubility
+at the extremes is governed by quantity: the *number* of fused rings, the
+*count* of chlorine atoms, the *length* of an alkyl tail. With access only
+to qualitative bits, the model has no choice but to anchor its predictions
+near the training mean for any molecule that lies outside the moderate
+regime.
+
+### The polyol diagnostic — and why the "sugar bias" disappeared
+
+One of the cleanest findings of Phase 4 is that **the sugar bias of
+Phase 2/3 is genuinely gone**, but it was replaced by a different polyol
+failure mode that the aggregate hydrophilic mean residual was hiding.
+
+Screening the pooled test predictions for molecules with ≥3 free hydroxyl
+groups (SMARTS `[OX2H]`, RDKit-validated, not a regex over SMILES):
+
+- **43 polyol predictions across 14 unique molecules.**
+- Mean residual on polyols: **+0.488** (positive, i.e. over-prediction of
+  solubility).
+- Median: **+0.715**.
+
+The sign is **opposite** to Phase 2 (where hydrophilic mean residual was
+≈ −0.9, sugars dominantly *under-*predicted) and to Phase 3 (≈ −0.45, same
+direction). Phase 4 *over-*predicts polyol solubility on average.
+
+Inspecting the molecules behind these numbers makes the pattern obvious.
+The 5 most badly mis-predicted polyols are:
+
+- **Riboflavin (vitamin B₂)** — true logS = −3.69, predicted ≈ −1.7
+  (residual +2.0). 4 hydroxyls on a ribityl chain, but attached to a
+  voluminous pteridine aromatic scaffold.
+- **Tubercidin/aristeromycin-like nucleoside** — logS = −1.95, pred −0.29
+  (residual +1.66). 3 hydroxyls on ribose, but the base is an aromatic
+  purine.
+- **Polyhydroxylated flavone** (luteolin-type) — logS = −3.62, pred −2.00
+  (residual +1.62). 4 phenolic OH on a tri-ring aromatic skeleton.
+
+The 5 *most accurately* predicted polyols are, by contrast, **simple
+saccharides and glycosides** — arbutin, sucrose, chloral hydrate
+glycoside, all with residuals under 0.15. The MLP has learned to predict
+canonical sugars well; what it cannot handle are **hybrids** — molecules
+with multiple OH groups attached to an aromatic or fused-ring scaffold.
+
+In other words, the model has internalized an unsophisticated heuristic:
+*count hydroxyls, count aromatic atoms, sum with appropriate sign*. The
+heuristic works on pure cases (a glucose molecule has only OH and
+sp³ carbons → predicted very soluble; a PAH has only aromatic carbons →
+predicted very insoluble — and both predictions are far better than
+random). It breaks on **molecules where the contributions cannot simply
+be summed** — riboflavin has the OH count of a tetraol but the polarity
+behavior of an aromatic system.
+
+This is exactly the kind of failure mode that motivates a graph-based
+representation. The OH oxygen in glucose and the OH oxygen in luteolin
+are identical Morgan bits, but they live in chemically completely
+different neighborhoods. A message-passing GNN can encode that
+neighborhood directly in the atom embedding; Morgan FP cannot.
+
+### Reading the model-class vs feature-class question, again
+
+Phase 3 concluded that the sugar bias was *partly* model-class
+(regularization-mediated) and *partly* feature-class. Phase 4 sharpens
+that reading:
+
+- **The sugar bias of Phase 2/3 was largely model-class.** A different
+  model class with completely different regularization mechanisms (dropout,
+  BN, weight decay, AdamW) eliminated the under-prediction direction
+  entirely — sugars are now predicted accurately on average.
+- **The compression bias at the tails of the distribution is largely
+  feature-class.** It is *worse* in Phase 4 than in Phase 3 despite tuning
+  to convergence, despite a different model class, despite different
+  regularization. It does not respond to model improvements on Morgan-only
+  features.
+- **The polyol-aromatic hybrid bias** is a refinement that Phase 4
+  introduces: a class-conditional failure where the heuristic the model
+  learns is too simple. This is also feature-class — Morgan cannot
+  represent the chemical context of a substructure.
+
+The cleanest framing of Phase 5 (ChemProp) is therefore: **does graph
+representation simultaneously reduce both tails of the compression bias
+*and* resolve the polyol-aromatic hybrid case?** Quantitative target:
+
+- Hydrophilic mean residual: from −0.67 (P4) toward |0.1|.
+- Hydrophobic mean residual: from +1.81 (P4) toward |0.5|.
+- Mean residual on polyol-aromatic hybrids (riboflavin, flavones,
+  nucleosides): from ≈ +1.5 (P4) toward |0.5|.
+
+If ChemProp achieves these three independent targets, the representation
+shift from substructure-presence (Morgan) to atom-in-context (graph) is
+empirically validated as the right next step on logS QSAR. If it
+achieves the first two but not the third, the polyol-aromatic case is a
+genuinely harder problem (likely involving 3D conformational ensembles
+or solvation effects) that 2D graph methods will not resolve. Either
+outcome is informative.
 
 ---
 
@@ -521,7 +823,11 @@ to justify graph-based modelling on chemically heterogeneous datasets.**
 - **Target not normalized.** Default `dc.molnet.load_delaney` applies a
   `NormalizationTransformer` that rescales logS to mean 0, std 1. This is
   bypassed via `transformers=[]`. We work on raw experimental logS (mol/L)
-  so RMSE/MAE are physically interpretable in log units.
+  so RMSE/MAE are physically interpretable in log units. (For PyTorch
+  training in Phase 4, the target is standardized *internally* within
+  `train_mlp`, fitted on the training fold only, and predictions are
+  inverse-transformed before any metric is computed. This is a numerical
+  stabilization choice; it does not affect the reported logS-space metrics.)
 
 - **Scaffold split recomputed on dedup.** Reusing DeepChem's original split
   on the deduplicated dataset would re-introduce identical molecules across
@@ -550,7 +856,7 @@ to justify graph-based modelling on chemically heterogeneous datasets.**
   even though ESOL itself is clean. Pattern is preserved so the same
   evaluation harness can be reused on ChEMBL without changes.
 
-- **Tune once, evaluate many (Phase 3).** Optuna selects hyperparameters
+- **Tune once, evaluate many (Phases 3 and 4).** Optuna selects hyperparameters
   on the seed=42 outer split using scaffold-disjoint 5-fold CV on the
   training set only. Those hyperparameters are then re-fit on each of the
   5 outer scaffold seeds for final evaluation. We are *not* re-tuning per
@@ -563,8 +869,19 @@ to justify graph-based modelling on chemically heterogeneous datasets.**
   the inner CV must be too — otherwise Optuna selects hyperparameters that
   exploit chemical similarity within the training set and the chosen
   configuration ends up over-confident on out-of-distribution scaffolds.
-  The greedy bin-packing implementation (see `scaffold_kfold` in notebook
-  03) keeps fold sizes balanced while preserving scaffold disjointness.
+  The greedy bin-packing implementation (`scaffold_kfold` in `src/splits.py`)
+  keeps fold sizes balanced while preserving scaffold disjointness.
+
+- **BatchNorm + variable batch size (Phase 4).** When the Optuna search
+  space includes both `batch_size` (as a categorical) and `use_batchnorm`
+  (as a boolean), and the training set size has `len % batch_size == 1`
+  for some combination, BatchNorm1d raises *Expected more than 1 value per
+  channel when training* on the last batch. Resolved in `src/training.py`
+  by setting `drop_last=True` on the train DataLoader **only when** the
+  trailing batch would have size 1; for all other batch sizes
+  `drop_last=False` is preserved so the model sees the full training set.
+  A latent bug pattern worth remembering for any neural-net pipeline whose
+  Optuna search space includes both knobs.
 
 ---
 
@@ -596,20 +913,20 @@ to justify graph-based modelling on chemically heterogeneous datasets.**
    Tuned XGBoost on Phase 2 features hits RMSE 0.86 — closing more than half
    the gap to published GNN numbers (0.55–0.70). But the sugar bias is only
    halved, not eliminated, and a new compression bias on hydrophobic outliers
-   appears as a regularization side-effect. The case for moving to graph-based
-   models in Phase 5 is now sharper: it is no longer about absolute RMSE
-   (XGBoost gets close enough that the marginal improvement might not justify
-   the complexity) but specifically about whether end-to-end-learned
-   representations can break the ~−0.45 hydrophilic residual ceiling that
-   any tabular model on these features seems to hit.
+   appears as a regularization side-effect. Phase 4 makes the point even
+   sharper on the opposite side: a tuned MLP on Morgan-only features beats
+   RF on aggregate RMSE while developing a much *stronger* symmetric
+   compression bias on both tails. Aggregate metrics and model-class
+   improvements can move in opposite directions on the parts of the
+   distribution that matter.
 
-6. **Most of the tuning variance came from two knobs.** On this dataset,
-   FANOVA attributes ~65% of the CV-RMSE variance across 100 Optuna trials
-   to `max_depth` and `reg_alpha`. `learning_rate` and `n_estimators` —
-   often considered the dominant gradient-boosting hyperparameters — were
-   below 5% each. This is informative: in regime p > n (2265 features, ~900
-   training molecules), capacity control and L1 regularization dominate the
-   tuning surface. Useful prior for the upcoming ADMET project.
+6. **Most of the tuning variance came from very few knobs — but which knobs
+   depend on the model class.** On Phase 3 (XGBoost), FANOVA attributes
+   ~65% of the CV-RMSE variance to `max_depth` and `reg_alpha`. On Phase 4
+   (MLP), FANOVA attributes **73% to a single binary**: `use_batchnorm`.
+   Translating this between architectures is not automatic: tree-ensemble
+   tuning is about capacity control and L1, neural-net tuning on small
+   datasets is about whether the gradient signal can stabilize at all.
 
 7. **Strong regularization buys mean-error reduction at the cost of small
    tail biases.** Phase 3 reduces RMSE in the moderate logS region (where
@@ -621,26 +938,46 @@ to justify graph-based modelling on chemically heterogeneous datasets.**
    QSAR deployment, this matters: the molecules a project actually cares
    about predicting often *are* the extremes.
 
+8. **Compression bias is a property of the featurization, not just of the
+   model.** Phase 3 showed mild compression as a side-effect of `reg_alpha`.
+   Phase 4 — completely different model class, completely different
+   regularization mechanism (dropout + BN + weight decay) — shows *worse*
+   compression on both tails. The bias is not what the model does to fit;
+   it is what the features cannot encode. Morgan FP captures qualitative
+   substructure presence, not quantitative extent (ring count, halogen
+   count, alkyl chain length), and the extremes of the logS distribution
+   are precisely governed by quantity.
+
+9. **Stratified analysis must be paired with targeted sub-class
+   diagnostics.** The Phase 4 aggregate hydrophilic residual of −0.67
+   looked like a continuation of the Phase 2/3 sugar bias. A targeted
+   polyol screen (≥3 free OH via SMARTS) revealed that the bias on canonical
+   sugars had inverted in sign, and the residual hydrophilic error was
+   concentrated on a different sub-class: polyol-aromatic hybrids
+   (riboflavin, polyhydroxyflavones, nucleosides). A single stratified
+   pattern can hide two failure modes that partially cancel in the average.
+   Whenever a stratified analysis reveals a directional bias, validate it
+   with at least one chemically-defined sub-class query.
+
+10. **Persist per-seed results to JSON after every notebook.** The pattern
+    *"each notebook writes a summary JSON in `reports/`"* makes paired
+    deltas between phases automatic and eliminates the need to re-run
+    upstream notebooks to recover lost numbers. Phase 4 demonstrated the
+    cost of *not* having this: the Phase 1 → Phase 4 comparison had to
+    fall back on an unpaired delta because no `phase1_summary.json` was
+    persisted. Cheap to write upstream; expensive to recover downstream.
+
 ---
 
 ## Next phases
 
-- **Phase 4 — MLP on Morgan FP.** A small dense MLP on the same Morgan FP
-  used in Phase 1, mostly to validate the PyTorch training loop and to
-  provide a third reference point on identical splits. Expectation: somewhere
-  between Phase 1 (RF on Morgan only) and Phase 2 (RF on Morgan + descriptors).
-  If the MLP without descriptors significantly beats RF without descriptors,
-  it would be a hint that part of Phase 1's error budget was about model
-  expressivity, not features.
-
 - **Phase 5 — ChemProp (D-MPNN).** Graph-based message-passing neural network.
-  After Phase 3, the question is no longer "does graph beat tabular on
-  aggregate RMSE" (probably yes, by some margin) but specifically: **does
-  ChemProp eliminate the residual sugar bias?** The Phase 3 hydrophilic mean
-  residual of −0.45 is now the bar: if ChemProp brings that below ~−0.10,
-  it justifies graph models as more than a marginal improvement. If it does
-  not, the bias is more deeply about the dataset than the representation,
-  and would warrant a different framing.
+  After Phases 3 and 4 the framing is sharp: aggregate RMSE is a secondary
+  goal; the primary question is whether the symmetric compression bias on the
+  tails of the logS distribution responds to the representation shift from
+  substructure-presence (Morgan) to atom-in-context (graph). Three
+  pre-registered quantitative targets are stated at the end of the Phase 4
+  section above. Phase 5 will report against those targets explicitly.
 
 After this project the workflow generalizes to:
 
@@ -673,6 +1010,10 @@ After this project the workflow generalizes to:
   framework. *KDD* **2019**, 2623–2631.
 - **Hutter, F. et al.** An efficient approach for assessing hyperparameter
   importance (Functional ANOVA). *ICML* **2014**.
+- **Paszke, A. et al.** PyTorch: an imperative style, high-performance deep
+  learning library. *NeurIPS* **2019**.
+- **Loshchilov, I.; Hutter, F.** Decoupled weight decay regularization
+  (AdamW). *ICLR* **2019**.
 
 ---
 

@@ -169,11 +169,17 @@ def _make_loaders(
     Xva_t = torch.from_numpy(X_valid).float()
     yva_t = torch.from_numpy(y_valid).float()
 
+    # Drop the last training batch if it would contain only one sample.
+    # BatchNorm1d (and similar) raise ValueError on batches of size 1 because
+    # variance is undefined. This can happen when len(X_train) % batch_size == 1
+    # — a sporadic Optuna trial pathology that's not worth aborting the trial.
+    # On all other batch sizes drop_last=False is preserved (full coverage).
+    drop_last = (len(X_train) % batch_size == 1)
     train_loader = DataLoader(
         TensorDataset(Xtr_t, ytr_t),
         batch_size=batch_size,
         shuffle=True,
-        drop_last=False,
+        drop_last=drop_last,
     )
     # Eval batch size large to amortize forward cost; size is dataset size
     # if it's small enough, otherwise capped.
