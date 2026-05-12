@@ -1,0 +1,68 @@
+{
+  "phase": "phase1_rf_morgan",
+  "per_seed": [
+    {
+      "seed": 42,
+      "RMSE": 1.6180851782873125,
+      "MAE": 1.2298138357774975,
+      "R2": 0.27258326632361585,
+      "test_size": 113
+    },
+    {
+      "seed": 0,
+      "RMSE": 1.394674004042202,
+      "MAE": 1.1194547764260327,
+      "R2": 0.4679440006416893,
+      "test_size": 113
+    },
+    {
+      "seed": 1,
+      "RMSE": 1.5260072820102626,
+      "MAE": 1.1838263294704316,
+      "R2": 0.34274785334386815,
+      "test_size": 113
+    },
+    {
+      "seed": 2,
+      "RMSE": 1.7730959130075443,
+      "MAE": 1.3596177287929372,
+      "R2": 0.31780330639297194,
+      "test_size": 113
+    },
+    {
+      "seed": 3,
+      "RMSE": 1.6407414984087005,
+      "MAE": 1.2999510438231388,
+      "R2": 0.3204134420091932,
+      "test_size": 113
+    }
+  ],
+  "aggregate": {
+    "RMSE_mean": 1.5905207751512043,
+    "RMSE_std": 0.1258042502295417,
+    "MAE_mean": 1.2385327428580077,
+    "MAE_std": 0.08447739888075505,
+    "R2_mean": 0.3442983737422677,
+    "R2_std": 0.06588805711912128,
+    "n_seeds": 5
+  },
+  "best_params": {
+    "n_estimators": 500,
+    "max_features": "sqrt",
+    "random_state": 42,
+    "tuned": false
+  },
+  "extra": {
+    "featurization": "morgan_fp_2048_radius2",
+    "descriptors_used": false,
+    "scaffold_seeds": [
+      42,
+      0,
+      1,
+      2,
+      3
+    ],
+    "regenerated_post_hoc": true,
+    "note": "Backfilled after Phase 4 introduced save_summary_json. Aggregates should match the cell output above: RMSE 1.591 \u00b1 0.126, R\u00b2 0.344 \u00b1 0.066."
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "phase": "phase2_rf_morgan_plus_desc",
+  "per_seed": [
+    {
+      "seed": 42,
+      "RMSE": 1.0186145503307014,
+      "MAE": 0.7652413805309732,
+      "R2": 0.7117294484670451,
+      "test_size": 113
+    },
+    {
+      "seed": 0,
+      "RMSE": 1.1190562005649696,
+      "MAE": 0.8186937876106201,
+      "R2": 0.6574565018562343,
+      "test_size": 113
+    },
+    {
+      "seed": 1,
+      "RMSE": 1.0283036454027592,
+      "MAE": 0.7439167787610628,
+      "R2": 0.7015568934782345,
+      "test_size": 113
+    },
+    {
+      "seed": 2,
+      "RMSE": 1.0102800888748418,
+      "MAE": 0.7673603008849561,
+      "R2": 0.7785229449007701,
+      "test_size": 113
+    },
+    {
+      "seed": 3,
+      "RMSE": 1.1322234804150428,
+      "MAE": 0.8445676637168151,
+      "R2": 0.6763849063693899,
+      "test_size": 113
+    }
+  ],
+  "aggregate": {
+    "RMSE_mean": 1.0616955931176628,
+    "RMSE_std": 0.05268581340305257,
+    "MAE_mean": 0.7879559823008855,
+    "MAE_std": 0.037494751160587675,
+    "R2_mean": 0.7051301390143349,
+    "R2_std": 0.04133252231473927,
+    "n_seeds": 5
+  },
+  "best_params": {
+    "n_estimators": 500,
+    "max_features": "sqrt",
+    "min_samples_leaf": 1,
+    "random_state": 42,
+    "tuned": false
+  },
+  "extra": {
+    "featurization": "morgan_fp_2048_radius2 + rdkit_2d_descriptors",
+    "descriptors_used": true,
+    "n_descriptors": 217,
+    "imputation": "median_fitted_on_training_fold",
+    "scaffold_seeds": [
+      42,
+      0,
+      1,
+      2,
+      3
+    ],
+    "regenerated_post_hoc": true,
+    "note": "Backfilled after Phase 4 introduced save_summary_json. Aggregates should match the cell output above: RMSE 1.062 \u00b1 0.053, R\u00b2 0.705 \u00b1 0.041."
+  }
+}

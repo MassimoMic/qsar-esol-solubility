@@ -1,0 +1,62 @@
+{
+  "phase": 2,
+  "split": "scaffold_balanced_seed42",
+  "regime_thresholds": {
+    "hydrophilic": "> -2",
+    "moderate": "-4 < x <= -2",
+    "hydrophobic": "<= -4"
+  },
+  "residual_sign_convention": "pred_minus_true",
+  "per_regime": {
+    "hydrophilic (logS > -2)": {
+      "n": 18,
+      "RMSE": 1.6700602037107009,
+      "MAE": 1.1996,
+      "mean_resid": -1.1234511111111114
+    },
+    "moderate (-4 < logS <= -2)": {
+      "n": 43,
+      "RMSE": 0.7884378377003372,
+      "MAE": 0.6621177674418615,
+      "mean_resid": -0.34688567441860557
+    },
+    "hydrophobic (logS <= -4)": {
+      "n": 52,
+      "RMSE": 0.8804713761744103,
+      "MAE": 0.700161769230768,
+      "mean_resid": 0.49768023076922857
+    }
+  },
+  "top5_worst_residuals": [
+    {
+      "smiles": "OCC1OC(OCC2OC(OC3(CO)OC(CO)C(O)C3O)C(O)C(O)C2O)C(O)C(O)C1O",
+      "logS": -0.41,
+      "logS_pred": -4.241728000000005,
+      "residual": -3.8317280000000045
+    },
+    {
+      "smiles": "COC(=O)c1ccccc1OC1OC(COC2OCC(O)C(O)C2O)C(O)C(O)C1O",
+      "logS": -0.742,
+      "logS_pred": -4.263898000000007,
+      "residual": -3.5218980000000073
+    },
+    {
+      "smiles": "CCOc1ccc(C(C)(C)COCc2cccc(Oc3ccccc3)c2)cc1",
+      "logS": -8.6,
+      "logS_pred": -5.631817999999996,
+      "residual": 2.968182000000003
+    },
+    {
+      "smiles": "CC1CC(C)C(=O)C(C(O)CC2CC(=O)NC(=O)C2)C1",
+      "logS": -1.13,
+      "logS_pred": -3.5330520000000027,
+      "residual": -2.403052000000003
+    },
+    {
+      "smiles": "OCc1ccccc1OC1OC(CO)C(O)C(O)C1O",
+      "logS": -0.85,
+      "logS_pred": -3.2048240000000026,
+      "residual": -2.3548240000000025
+    }
+  ]
+}

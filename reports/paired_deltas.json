@@ -1,0 +1,380 @@
+{
+  "P1 \u2192 P2": {
+    "phase_a": "phase1",
+    "phase_b": "phase2",
+    "note": "add RDKit descriptors (same RF)",
+    "rmse": {
+      "metric": "RMSE",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": -0.2756178034772325
+        },
+        {
+          "seed": 1,
+          "delta": -0.4977036366075034
+        },
+        {
+          "seed": 2,
+          "delta": -0.7628158241327025
+        },
+        {
+          "seed": 3,
+          "delta": -0.5085180179936577
+        },
+        {
+          "seed": 42,
+          "delta": -0.5994706279566111
+        }
+      ],
+      "mean_delta": -0.5288251820335415,
+      "std_delta": 0.15826389839508737,
+      "wins": 5,
+      "n_seeds": 5
+    },
+    "r2": {
+      "metric": "R2",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": 0.189512501214545
+        },
+        {
+          "seed": 1,
+          "delta": 0.3588090401343663
+        },
+        {
+          "seed": 2,
+          "delta": 0.4607196385077982
+        },
+        {
+          "seed": 3,
+          "delta": 0.35597146436019667
+        },
+        {
+          "seed": 42,
+          "delta": 0.43914618214342926
+        }
+      ],
+      "mean_delta": 0.36083176527206706,
+      "std_delta": 0.09538211497823539,
+      "wins": 5,
+      "n_seeds": 5
+    }
+  },
+  "P2 \u2192 P3": {
+    "phase_a": "phase2",
+    "phase_b": "phase3",
+    "note": "tune XGBoost (same features)",
+    "rmse": {
+      "metric": "RMSE",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": -0.25160192389721736
+        },
+        {
+          "seed": 1,
+          "delta": -0.19033914303511856
+        },
+        {
+          "seed": 2,
+          "delta": -0.14823715139666016
+        },
+        {
+          "seed": 3,
+          "delta": -0.22527595778607756
+        },
+        {
+          "seed": 42,
+          "delta": -0.18435984535000227
+        }
+      ],
+      "mean_delta": -0.1999628042930152,
+      "std_delta": 0.03554986572294956,
+      "wins": 5,
+      "n_seeds": 5
+    },
+    "r2": {
+      "metric": "R2",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": 0.13671518366853386
+        },
+        {
+          "seed": 1,
+          "delta": 0.10025844273849782
+        },
+        {
+          "seed": 2,
+          "delta": 0.06022585744649733
+        },
+        {
+          "seed": 3,
+          "delta": 0.11596660591454244
+        },
+        {
+          "seed": 42,
+          "delta": 0.09490555608649975
+        }
+      ],
+      "mean_delta": 0.10161432917091424,
+      "std_delta": 0.025289956465709418,
+      "wins": 5,
+      "n_seeds": 5
+    }
+  },
+  "P1 \u2192 P3": {
+    "phase_a": "phase1",
+    "phase_b": "phase3",
+    "note": "tuned XGB + desc vs untuned RF + Morgan",
+    "rmse": {
+      "metric": "RMSE",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": -0.5272197273744499
+        },
+        {
+          "seed": 1,
+          "delta": -0.688042779642622
+        },
+        {
+          "seed": 2,
+          "delta": -0.9110529755293627
+        },
+        {
+          "seed": 3,
+          "delta": -0.7337939757797353
+        },
+        {
+          "seed": 42,
+          "delta": -0.7838304733066134
+        }
+      ],
+      "mean_delta": -0.7287879863265567,
+      "std_delta": 0.12535166251562377,
+      "wins": 5,
+      "n_seeds": 5
+    },
+    "r2": {
+      "metric": "R2",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": 0.32622768488307885
+        },
+        {
+          "seed": 1,
+          "delta": 0.45906748287286414
+        },
+        {
+          "seed": 2,
+          "delta": 0.5209454959542955
+        },
+        {
+          "seed": 3,
+          "delta": 0.4719380702747391
+        },
+        {
+          "seed": 42,
+          "delta": 0.534051738229929
+        }
+      ],
+      "mean_delta": 0.46244609444298135,
+      "std_delta": 0.0737651895187519,
+      "wins": 5,
+      "n_seeds": 5
+    }
+  },
+  "P1 \u2192 P4": {
+    "phase_a": "phase1",
+    "phase_b": "phase4",
+    "note": "tuned MLP vs untuned RF (Morgan-only both)",
+    "rmse": {
+      "metric": "RMSE",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": -0.10210334305302671
+        },
+        {
+          "seed": 1,
+          "delta": -0.08127390918939836
+        },
+        {
+          "seed": 2,
+          "delta": -0.16399319427941839
+        },
+        {
+          "seed": 3,
+          "delta": -0.20787743962224492
+        },
+        {
+          "seed": 42,
+          "delta": -0.21873758688526856
+        }
+      ],
+      "mean_delta": -0.15479709460587138,
+      "std_delta": 0.055086782581110515,
+      "wins": 5,
+      "n_seeds": 5
+    },
+    "r2": {
+      "metric": "R2",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": 0.07505145287885673
+        },
+        {
+          "seed": 1,
+          "delta": 0.06814510893426462
+        },
+        {
+          "seed": 2,
+          "delta": 0.12035664896649922
+        },
+        {
+          "seed": 3,
+          "delta": 0.16129464413109507
+        },
+        {
+          "seed": 42,
+          "delta": 0.18337559969616934
+        }
+      ],
+      "mean_delta": 0.121644690921377,
+      "std_delta": 0.045645630774160215,
+      "wins": 5,
+      "n_seeds": 5
+    }
+  },
+  "P2 \u2192 P4": {
+    "phase_a": "phase2",
+    "phase_b": "phase4",
+    "note": "MLP Morgan-only vs RF Morgan+desc",
+    "rmse": {
+      "metric": "RMSE",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": 0.17351446042420582
+        },
+        {
+          "seed": 1,
+          "delta": 0.416429727418105
+        },
+        {
+          "seed": 2,
+          "delta": 0.5988226298532842
+        },
+        {
+          "seed": 3,
+          "delta": 0.3006405783714128
+        },
+        {
+          "seed": 42,
+          "delta": 0.38073304107134254
+        }
+      ],
+      "mean_delta": 0.3740280874276701,
+      "std_delta": 0.13997634291633004,
+      "wins": 0,
+      "n_seeds": 5
+    },
+    "r2": {
+      "metric": "R2",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": -0.11446104833568826
+        },
+        {
+          "seed": 1,
+          "delta": -0.2906639312001017
+        },
+        {
+          "seed": 2,
+          "delta": -0.34036298954129895
+        },
+        {
+          "seed": 3,
+          "delta": -0.1946768202291016
+        },
+        {
+          "seed": 42,
+          "delta": -0.2557705824472599
+        }
+      ],
+      "mean_delta": -0.2391870743506901,
+      "std_delta": 0.07835711790769795,
+      "wins": 0,
+      "n_seeds": 5
+    }
+  },
+  "P3 \u2192 P4": {
+    "phase_a": "phase3",
+    "phase_b": "phase4",
+    "note": "MLP Morgan-only vs XGB Morgan+desc",
+    "rmse": {
+      "metric": "RMSE",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": 0.4251163843214232
+        },
+        {
+          "seed": 1,
+          "delta": 0.6067688704532236
+        },
+        {
+          "seed": 2,
+          "delta": 0.7470597812499443
+        },
+        {
+          "seed": 3,
+          "delta": 0.5259165361574903
+        },
+        {
+          "seed": 42,
+          "delta": 0.5650928864213448
+        }
+      ],
+      "mean_delta": 0.5739908917206853,
+      "std_delta": 0.10543355587968958,
+      "wins": 0,
+      "n_seeds": 5
+    },
+    "r2": {
+      "metric": "R2",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": -0.2511762320042221
+        },
+        {
+          "seed": 1,
+          "delta": -0.3909223739385995
+        },
+        {
+          "seed": 2,
+          "delta": -0.4005888469877963
+        },
+        {
+          "seed": 3,
+          "delta": -0.31064342614364404
+        },
+        {
+          "seed": 42,
+          "delta": -0.3506761385337597
+        }
+      ],
+      "mean_delta": -0.3408014035216043,
+      "std_delta": 0.0550024280052698,
+      "wins": 0,
+      "n_seeds": 5
+    }
+  }
+}

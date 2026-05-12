@@ -1,0 +1,256 @@
+{
+  "phase": "phase4_mlp_morgan",
+  "analysis": "top10_worst_residuals_pooled_5seed",
+  "protocol": {
+    "scaffold_seeds": [
+      42,
+      0,
+      1,
+      2,
+      3
+    ],
+    "pool_size": 565,
+    "best_params_source": "reports/phase4_summary.json",
+    "best_params": {
+      "hidden_dims": [
+        512,
+        256
+      ],
+      "dropout": 0.32036917602523796,
+      "lr": 0.0030215644709678984,
+      "weight_decay": 2.3125519393338786e-05,
+      "batch_size": 32,
+      "use_batchnorm": true
+    }
+  },
+  "top10": [
+    {
+      "rank": 1,
+      "seed_of_appearance": 2,
+      "smiles": "c1cc2ccc3ccc4ccc5ccc6ccc1c1c2c3c4c5c61",
+      "canonical_smiles": "c1cc2ccc3ccc4ccc5ccc6ccc1c1c2c3c4c5c61",
+      "inchikey": "VPUGDVKSAQVFFS-UHFFFAOYSA-N",
+      "y_true": -9.332,
+      "y_pred": -4.241842269897461,
+      "residual": 5.09015773010254,
+      "descriptors": {
+        "mol_wt": 300.4,
+        "n_heavy_atoms": 24,
+        "n_rings": 7,
+        "n_aromatic_rings": 7,
+        "n_Cl": 0,
+        "n_OH": 0,
+        "logP_crippen": 6.92,
+        "tpsa": 0.0
+      },
+      "rdkit_classes": [
+        "PAH (3-ring fused, phenanthrene-like)",
+        "PAH (\u22653 fused aromatic rings, loose)"
+      ]
+    },
+    {
+      "rank": 2,
+      "seed_of_appearance": 1,
+      "smiles": "ClC1(Cl)C2(Cl)C3(Cl)C4(Cl)C(Cl)(Cl)C5(Cl)C3(Cl)C1(Cl)C5(Cl)C24Cl",
+      "canonical_smiles": "ClC1(Cl)C2(Cl)C3(Cl)C4(Cl)C(Cl)(Cl)C5(Cl)C3(Cl)C1(Cl)C5(Cl)C24Cl",
+      "inchikey": "GVYLCNUFSHDAAW-UHFFFAOYSA-N",
+      "y_true": -6.8,
+      "y_pred": -2.8108766078948975,
+      "residual": 3.9891233921051024,
+      "descriptors": {
+        "mol_wt": 545.5,
+        "n_heavy_atoms": 22,
+        "n_rings": 6,
+        "n_aromatic_rings": 0,
+        "n_Cl": 12,
+        "n_OH": 0,
+        "logP_crippen": 6.22,
+        "tpsa": 0.0
+      },
+      "rdkit_classes": [
+        "Polychloro (\u22654 Cl atoms)"
+      ]
+    },
+    {
+      "rank": 3,
+      "seed_of_appearance": 1,
+      "smiles": "CCOc1ccc(C(C)(C)COCc2cccc(Oc3ccccc3)c2)cc1",
+      "canonical_smiles": "CCOc1ccc(C(C)(C)COCc2cccc(Oc3ccccc3)c2)cc1",
+      "inchikey": "YREQHYQNNWYQCJ-UHFFFAOYSA-N",
+      "y_true": -8.6,
+      "y_pred": -4.638680140177409,
+      "residual": 3.9613198598225905,
+      "descriptors": {
+        "mol_wt": 376.5,
+        "n_heavy_atoms": 28,
+        "n_rings": 3,
+        "n_aromatic_rings": 3,
+        "n_Cl": 0,
+        "n_OH": 0,
+        "logP_crippen": 6.37,
+        "tpsa": 27.7
+      },
+      "rdkit_classes": [
+        "Diaryl ether"
+      ]
+    },
+    {
+      "rank": 4,
+      "seed_of_appearance": 2,
+      "smiles": "c1ccc2cc3c(cc2c1)-c1cccc2cccc-3c12",
+      "canonical_smiles": "c1ccc2cc3c(cc2c1)-c1cccc2cccc-3c12",
+      "inchikey": "HAXBIWFMXWRORI-UHFFFAOYSA-N",
+      "y_true": -8.49,
+      "y_pred": -5.126102924346924,
+      "residual": 3.3638970756530764,
+      "descriptors": {
+        "mol_wt": 252.3,
+        "n_heavy_atoms": 20,
+        "n_rings": 5,
+        "n_aromatic_rings": 4,
+        "n_Cl": 0,
+        "n_OH": 0,
+        "logP_crippen": 5.64,
+        "tpsa": 0.0
+      },
+      "rdkit_classes": [
+        "PAH (acenaphthylene/fluoranthene, 5-ring fused to aromatics)"
+      ]
+    },
+    {
+      "rank": 5,
+      "seed_of_appearance": 2,
+      "smiles": "CC1COC2CC3(C)C(CC4C5C=C6CC(O)CCC6(C)CC5CCC43C)OC2C1",
+      "canonical_smiles": "CC1COC2CC3(C)C(CC4C5C=C6CC(O)CCC6(C)CC5CCC43C)OC2C1",
+      "inchikey": "CPMZWWWXIWHTMU-UHFFFAOYSA-N",
+      "y_true": -7.32,
+      "y_pred": -3.96689510345459,
+      "residual": 3.3531048965454104,
+      "descriptors": {
+        "mol_wt": 414.6,
+        "n_heavy_atoms": 30,
+        "n_rings": 6,
+        "n_aromatic_rings": 0,
+        "n_Cl": 0,
+        "n_OH": 1,
+        "logP_crippen": 5.51,
+        "tpsa": 38.7
+      },
+      "rdkit_classes": []
+    },
+    {
+      "rank": 6,
+      "seed_of_appearance": 42,
+      "smiles": "c1cc2ccc3ccc4ccc5cccc6c(c1)c2c3c4c56",
+      "canonical_smiles": "c1cc2ccc3ccc4ccc5cccc6c(c1)c2c3c4c56",
+      "inchikey": "GYFAGKUZYNFMBN-UHFFFAOYSA-N",
+      "y_true": -9.018,
+      "y_pred": -5.718009948730469,
+      "residual": 3.299990051269532,
+      "descriptors": {
+        "mol_wt": 276.3,
+        "n_heavy_atoms": 22,
+        "n_rings": 6,
+        "n_aromatic_rings": 6,
+        "n_Cl": 0,
+        "n_OH": 0,
+        "logP_crippen": 6.33,
+        "tpsa": 0.0
+      },
+      "rdkit_classes": [
+        "PAH (3-ring fused, phenanthrene-like)",
+        "PAH (\u22653 fused aromatic rings, loose)"
+      ]
+    },
+    {
+      "rank": 7,
+      "seed_of_appearance": 0,
+      "smiles": "CC=C(C(=CC)c1ccc(O)cc1)c1ccc(O)cc1",
+      "canonical_smiles": "CC=C(C(=CC)c1ccc(O)cc1)c1ccc(O)cc1",
+      "inchikey": "NFDFQCUYFHCNBW-UHFFFAOYSA-N",
+      "y_true": -4.95,
+      "y_pred": -1.9972220361232758,
+      "residual": 2.9527779638767244,
+      "descriptors": {
+        "mol_wt": 266.3,
+        "n_heavy_atoms": 20,
+        "n_rings": 2,
+        "n_aromatic_rings": 2,
+        "n_Cl": 0,
+        "n_OH": 2,
+        "logP_crippen": 4.6,
+        "tpsa": 40.5
+      },
+      "rdkit_classes": []
+    },
+    {
+      "rank": 8,
+      "seed_of_appearance": 0,
+      "smiles": "CN1C(C(=O)Nc2ccccn2)=C(O)c2ccccc2S1(=O)=O",
+      "canonical_smiles": "CN1C(C(=O)Nc2ccccn2)=C(O)c2ccccc2S1(=O)=O",
+      "inchikey": "QYSPLQLAKJAUJT-UHFFFAOYSA-N",
+      "y_true": -4.16,
+      "y_pred": -1.2389859855175018,
+      "residual": 2.9210140144824983,
+      "descriptors": {
+        "mol_wt": 331.4,
+        "n_heavy_atoms": 23,
+        "n_rings": 3,
+        "n_aromatic_rings": 2,
+        "n_Cl": 0,
+        "n_OH": 1,
+        "logP_crippen": 1.58,
+        "tpsa": 99.6
+      },
+      "rdkit_classes": [
+        "Sulfonamide"
+      ]
+    },
+    {
+      "rank": 9,
+      "seed_of_appearance": 0,
+      "smiles": "O=C1CCC(=O)N1",
+      "canonical_smiles": "O=C1CCC(=O)N1",
+      "inchikey": "KZNICNPSHKQLFF-UHFFFAOYSA-N",
+      "y_true": 0.3,
+      "y_pred": -2.595218817392985,
+      "residual": -2.8952188173929847,
+      "descriptors": {
+        "mol_wt": 99.1,
+        "n_heavy_atoms": 7,
+        "n_rings": 1,
+        "n_aromatic_rings": 0,
+        "n_Cl": 0,
+        "n_OH": 0,
+        "logP_crippen": -0.58,
+        "tpsa": 46.2
+      },
+      "rdkit_classes": [
+        "Succinimide / barbiturate-like (cyclic imide)"
+      ]
+    },
+    {
+      "rank": 10,
+      "seed_of_appearance": 1,
+      "smiles": "ClC(Cl)=C(c1ccc(Cl)cc1)c1ccc(Cl)cc1",
+      "canonical_smiles": "ClC(Cl)=C(c1ccc(Cl)cc1)c1ccc(Cl)cc1",
+      "inchikey": "UCNVFOCBFJOQAL-UHFFFAOYSA-N",
+      "y_true": -6.9,
+      "y_pred": -4.0482707023620605,
+      "residual": 2.85172929763794,
+      "descriptors": {
+        "mol_wt": 318.0,
+        "n_heavy_atoms": 18,
+        "n_rings": 2,
+        "n_aromatic_rings": 2,
+        "n_Cl": 4,
+        "n_OH": 0,
+        "logP_crippen": 6.19,
+        "tpsa": 0.0
+      },
+      "rdkit_classes": [
+        "Polychloro (\u22654 Cl atoms)"
+      ]
+    }
+  ]
+}

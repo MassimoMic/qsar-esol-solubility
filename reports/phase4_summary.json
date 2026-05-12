@@ -1,0 +1,1563 @@
+{
+  "phase": "phase4_mlp_morgan",
+  "per_seed": [
+    {
+      "split": "test",
+      "RMSE": 1.399347591402044,
+      "MAE": 1.108169058419962,
+      "R2": 0.4559588660197852,
+      "seed": 42,
+      "train_size": 893,
+      "valid_size": 111,
+      "test_size": 113,
+      "test_smiles": [
+        "O=c1[nH]c(=O)c2[nH]c(=O)[nH]c2[nH]1",
+        "O=C1C2(Cl)C3(Cl)C4(Cl)C(Cl)(Cl)C5(Cl)C3(Cl)C1(Cl)C5(Cl)C24Cl",
+        "c1ccc(Nc2ccccc2)cc1",
+        "CN1CC(O)N(c2nnc(C(C)(C)C)s2)C1=O",
+        "Cc1cc2nc3c(=O)[nH]c(=O)nc-3n(CC(O)C(O)C(O)CO)c2cc1C",
+        "c1ccc2c(c1)cnc1ccccc12",
+        "O=CNC(N1C=CN(C(NC=O)C(Cl)(Cl)Cl)C=C1)C(Cl)(Cl)Cl",
+        "COc1c2occc2c(OC)c2c(=O)cc(C)oc12",
+        "CC12CCC3C(CCC4CC(O)CCC43C)C1CCC2=O",
+        "c1ccc2c(c1)[nH]c1ccccc12",
+        "OCc1ccccc1OC1OC(CO)C(O)C(O)C1O",
+        "CCCOP(=S)(OCCC)SCC(=O)N1CCCCC1C",
+        "c1cnc2c(c1)ccc1ncccc12",
+        "C1=Cc2cccc3cccc1c23",
+        "CC12CCC3c4ccc(O)cc4CCC3C1CCC2=O",
+        "c1ccc2c(c1)Cc1cc3ccccc3cc1-2",
+        "Clc1c(Cl)c(Cl)c2nccnc2c1Cl",
+        "ClC1=C(Cl)C2(Cl)C3C4CC(C5OC45)C3C1(Cl)C2(Cl)Cl",
+        "O=C1CN(N=Cc2ccc([N+](=O)[O-])o2)C(=O)N1",
+        "O=C1C(O)=C(C2CCC(c3ccc(Cl)cc3)CC2)C(=O)c2ccccc21",
+        "c1ccsc1",
+        "O=C1NC(=O)C(=O)N1",
+        "c1ccc2c(c1)c1ccccc1c1ccccc21",
+        "O=C1NC(=O)C(=O)C(=O)N1",
+        "O=C1C=C2CC3(O)COc4c(ccc(O)c4O)C3=C2C=C1O",
+        "CCCC1C(=O)N2C(N(C)C)=Nc3ccc(C)cc3N2C1=O",
+        "O=C1NC(=O)C2(CCC2)C(=O)N1",
+        "O=C1NC(=O)C2(CCCC2)C(=O)N1",
+        "O=Cc1ccc2c(c1)OCO2",
+        "c1ccc2c(c1)-c1cccc3cccc-2c13",
+        "COC1=C(OC)C2C(=O)OCC2C=C1",
+        "CC12CC1(C)C(=O)N(c1cc(Cl)cc(Cl)c1)C2=O",
+        "Cc1cc(C(=O)NNCc2ccccc2)no1",
+        "CSc1nnc(C(C)(C)C)c(=O)n1N",
+        "CC(=O)N(c1onc(C)c1C)S(=O)c1ccc(N)cc1",
+        "Cc1cc(OC(=O)N(C)C)n(-c2ccccc2)n1",
+        "OCC1OC(n2cnc3c(O)ncnc32)C(O)C1O",
+        "O=C1C(Cl)C(CCl)CN1c1cccc(C(F)(F)F)c1",
+        "Cc1ccnc2c1NC(=O)c1cccnc1N2C1CC1",
+        "CC1=C2C3OC(=O)C(C)C3CCC2(C)C=CC1=O",
+        "Cc1ccc(OP(=O)(Oc2cccc(C)c2)Oc2ccccc2C)cc1",
+        "OC(c1ccc(Cl)cc1)(c1cncnc1)c1ccccc1Cl",
+        "CCC1(c2ccccc2)C(=O)NCNC1=O",
+        "ClC1(Cl)C2(Cl)C3(Cl)C4(Cl)C(Cl)(Cl)C5(Cl)C3(Cl)C1(Cl)C5(Cl)C24Cl",
+        "CCC(=C(CC)c1ccc(O)cc1)c1ccc(O)cc1",
+        "ClC(Cl)=C(c1ccc(Cl)cc1)c1ccc(Cl)cc1",
+        "O=C(OCC(O)CO)c1ccccc1Nc1ccnc2cc(Cl)ccc12",
+        "OCC1OC(OCC2OC(OC3(CO)OC(CO)C(O)C3O)C(O)C(O)C2O)C(O)C(O)C1O",
+        "c1ccc2c(c1)-c1cccc3c1c-2cc1ccccc13",
+        "CC12CCC3C(CCC4=CC(=O)CCC43C)C1CCC2=O",
+        "c1ccc2c(c1)CCC2",
+        "O=C1c2ccccc2Cc2ccccc2N1CCF",
+        "COc1cc(C2c3cc4c(cc3C(OC3OC5COC(C)OC5C(O)C3O)C3COC(=O)C23)OCO4)cc(OC)c1O",
+        "CCOc1ccc(C(C)(C)COCc2cccc(Oc3ccccc3)c2)cc1",
+        "O=c1[nH]cnc2[nH]ncc12",
+        "CC1(C)C2CCC1(C)C(O)C2",
+        "CCCC1COC(Cn2cncn2)(c2ccc(Cl)cc2Cl)O1",
+        "Cc1occc1C(=O)Nc1ccccc1",
+        "COc1cc2c(N)nc(N3CCN(C(=O)OCC(C)(C)O)CC3)nc2c(OC)c1OC",
+        "O=C1NCCN1c1ncc([N+](=O)[O-])s1",
+        "CC12CC(=O)C3C(CCC4=CC(=O)CCC43C)C1CCC2=O",
+        "ClC1=C(Cl)C2(Cl)C3C(Cl)C(Cl)CC3C1(Cl)C2(Cl)Cl",
+        "CC1=C(C(=O)Nc2ccccc2)CCCO1",
+        "O=C1NC(=O)C2(CCCCCC2)C(=O)N1",
+        "O=C(c1ccccc1)C(O)c1ccccc1",
+        "CC(=O)SC1CC2=CC(=O)CCC2(C)C2CCC3(C)C(CCC34CCC(=O)O4)C12",
+        "COC(=O)c1ccccc1OC1OC(COC2OCC(O)C(O)C2O)C(O)C(O)C1O",
+        "Cc1ccccc1N1C(=O)c2cc(S(N)(=O)=O)c(Cl)cc2NC1C",
+        "Cc1nnc2n1-c1ccc(Cl)cc1C(c1ccccc1Cl)=NC2",
+        "CC12CCC3C(CC=C4CC(O)CCC43C)C1CCC2=O",
+        "ClC1=C(Cl)C2(Cl)C3C4C=CC(C4)C3C1(Cl)C2(Cl)Cl",
+        "c1ccc2c(c1)Cc1c-2ccc2ccccc12",
+        "c1ccc2c(c1)oc1ccccc12",
+        "Cc1cccc2sc3nncn3c12",
+        "c1ccc2c(c1)CCN2",
+        "CC1Cc2ccccc2N1NC(=O)c1ccc(Cl)c(S(N)(=O)=O)c1",
+        "c1cc2ccc3ccc4ccc5cccc6c(c1)c2c3c4c56",
+        "Cc1ccccc1-n1c(C)nc2ccccc2c1=O",
+        "c1ccc2c(c1)c1cccc3ccc4cccc2c4c31",
+        "CC=C(C(=CC)c1ccc(O)cc1)c1ccc(O)cc1",
+        "C1=CCC=CC1",
+        "COP(=S)(OC)Oc1ccc(Sc2ccc(OP(=S)(OC)OC)cc2)cc1",
+        "O=c1[nH]cnc2nc[nH]c12",
+        "O=C(Nc1ccccc1)N(Cc1ccc(Cl)cc1)C1CCCC1",
+        "CCOC(=O)c1ccccc1S(=O)(=O)NN(C=O)c1nc(Cl)cc(OC)n1",
+        "Nc1cc(N2CCCCC2)nc(N)[n+]1[O-]",
+        "c1ccc2c(c1)ccc1c2ccc2c3ccccc3ccc21",
+        "c1cc2ccc3cccc4ccc(c1)c2c34",
+        "CCCCNC(=O)n1c(NC(=O)OC)nc2ccccc21",
+        "O=C1c2ccccc2C(=O)c2ccccc21",
+        "c1ccc2ocnc2c1",
+        "OC(Cn1cncn1)(Cn1cncn1)c1ccc(F)cc1F",
+        "O=C1CSC(=S)N1",
+        "CN(C(=O)COc1nc2ccccc2s1)c1ccccc1",
+        "CCN1c2ncccc2C(=S)N(C)c2cccnc21",
+        "CC12CCC3C(=CCc4cc(O)ccc43)C1CCC2=O",
+        "C=CC1(C)OC(=O)N(c2cc(Cl)cc(Cl)c2)C1=O",
+        "CC(=O)C1CCC2C3CC=C4CC(O)CCC4(C)C3CCC12C",
+        "Nc1nc(N)c2nc(-c3ccccc3)c(N)nc2n1",
+        "O=c1c(O)c(-c2ccc(O)cc2O)oc2cc(O)cc(O)c12",
+        "CC12CCC(CC1)C(C)(C)O2",
+        "O=C1NC(=O)C2C3C(C(O)(c4ccccc4)c4ccccn4)=CC(C3=C(c3ccccc3)c3ccccn3)C12",
+        "c1ccc2[nH]ncc2c1",
+        "CC12CCC3C(CCC4CC(=O)CCC43C)C1CCC2O",
+        "c1ccc2c(c1)sc1ccccc12",
+        "CC1CC(C)C(=O)C(C(O)CC2CC(=O)NC(=O)C2)C1",
+        "CCOC(=O)c1cncn1C(C)c1ccccc1",
+        "CN1C(C(=O)Nc2ccccn2)=C(O)c2ccccc2S1(=O)=O",
+        "COC1=CC2OC3C=CC(O)=CC3C(=O)C2C(O)=C1",
+        "c1ccc2c3c(ccc2c1)-c1cccc2cccc-3c12",
+        "C=C(C)C1Cc2c(ccc3c2OC2COc4cc(OC)c(OC)cc4C2C3=O)O1",
+        "CC12CCC3C(CCC4CC5SC5CC43C)C1CCC2O",
+        "c1cc2c3c(cccc3c1)CC2"
+      ],
+      "train_extra": {
+        "config": {
+          "input_dim": 2048,
+          "hidden_dims": [
+            512,
+            256
+          ],
+          "dropout": 0.32036917602523796,
+          "use_batchnorm": true
+        },
+        "best_valid_rmse": 1.3879826068878174,
+        "best_epoch": 2,
+        "stopped_at": 22,
+        "history": [
+          {
+            "epoch": 1,
+            "train_loss": 0.8090646369393169,
+            "valid_rmse": 1.7765475511550903,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 2,
+            "train_loss": 0.29402472354129605,
+            "valid_rmse": 1.3879826068878174,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 3,
+            "train_loss": 0.1932474201230159,
+            "valid_rmse": 1.3973705768585205,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 4,
+            "train_loss": 0.1730507165360424,
+            "valid_rmse": 1.5557328462600708,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 5,
+            "train_loss": 0.20637418805284702,
+            "valid_rmse": 1.5262781381607056,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 6,
+            "train_loss": 0.15360619716371293,
+            "valid_rmse": 1.6884300708770752,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 7,
+            "train_loss": 0.13924797778700929,
+            "valid_rmse": 1.4712575674057007,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 8,
+            "train_loss": 0.13980501450489777,
+            "valid_rmse": 1.543750524520874,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 9,
+            "train_loss": 0.15646214422760457,
+            "valid_rmse": 1.5166245698928833,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 10,
+            "train_loss": 0.15942104918358707,
+            "valid_rmse": 1.5714939832687378,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 11,
+            "train_loss": 0.13619825426668497,
+            "valid_rmse": 1.483109474182129,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 12,
+            "train_loss": 0.1447024262632261,
+            "valid_rmse": 1.4411989450454712,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 13,
+            "train_loss": 0.13194148177395743,
+            "valid_rmse": 1.4370431900024414,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 14,
+            "train_loss": 0.136708739548421,
+            "valid_rmse": 1.575182318687439,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 15,
+            "train_loss": 0.11447124827281892,
+            "valid_rmse": 1.6581847667694092,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 16,
+            "train_loss": 0.1132912465182424,
+            "valid_rmse": 1.59530770778656,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 17,
+            "train_loss": 0.13125892905862574,
+            "valid_rmse": 1.5494059324264526,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 18,
+            "train_loss": 0.10014705688662384,
+            "valid_rmse": 1.5262283086776733,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 19,
+            "train_loss": 0.09864561847950283,
+            "valid_rmse": 1.5459024906158447,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 20,
+            "train_loss": 0.08352640700450403,
+            "valid_rmse": 1.5068598985671997,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 21,
+            "train_loss": 0.09269781056937552,
+            "valid_rmse": 1.64970064163208,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 22,
+            "train_loss": 0.11619036989276113,
+            "valid_rmse": 1.638351559638977,
+            "lr": 0.0015107822354839492
+          }
+        ]
+      }
+    },
+    {
+      "split": "test",
+      "RMSE": 1.2925706609891754,
+      "MAE": 1.006603856128929,
+      "R2": 0.542995453520546,
+      "seed": 0,
+      "train_size": 893,
+      "valid_size": 111,
+      "test_size": 113,
+      "test_smiles": [
+        "O=C(C=CC=Cc1ccc2c(c1)OCO2)N1CCCCC1",
+        "CN1CC(O)N(c2nnc(C(C)(C)C)s2)C1=O",
+        "CCOC(=O)c1cncn1C(C)c1ccccc1",
+        "ClC1=C(Cl)C(Cl)(C2(Cl)C(Cl)=C(Cl)C(Cl)=C2Cl)C(Cl)=C1Cl",
+        "O=C1NC(=O)C(O)(C2(O)C(=O)NC(=O)NC2=O)C(=O)N1",
+        "CCN1c2ccccc2C(=O)N(C)c2ccccc21",
+        "COc1cc2c(N)nc(N3CCN(C(=O)OCC(C)(C)O)CC3)nc2c(OC)c1OC",
+        "c1ccsc1",
+        "O=C1NC(=O)C2(CCC2)C(=O)N1",
+        "c1ccc(C2CO2)cc1",
+        "OCC(O)C1OC2OC(C(Cl)(Cl)Cl)OC2C1O",
+        "c1ccc2c(c1)Cc1cc3ccccc3cc1-2",
+        "COC(=O)c1ccccc1OC1OC(COC2OCC(O)C(O)C2O)C(O)C(O)C1O",
+        "c1cc2ccc3cccc4ccc(c1)c2c34",
+        "CCCCNC(=O)n1c(NC(=O)OC)nc2ccccc21",
+        "Cc1ccccc1-n1c(C)nc2ccccc2c1=O",
+        "COC1=CC(=O)CC(C)C12Oc1c(Cl)c(OC)cc(OC)c1C2=O",
+        "Cc1ccnc2c1NC(=O)c1cccnc1N2C1CC1",
+        "c1ccc2nc(-c3ccc4ccccc4n3)ccc2c1",
+        "OC(Cn1cncn1)(c1ccc(F)cc1)c1ccccc1F",
+        "CC1(C)OC2CC3C4CCC5=CC(=O)C=CC5(C)C4(F)C(O)CC3(C)C2(C(=O)CO)O1",
+        "O=Cc1ccc2c(c1)OCO2",
+        "ClC1=C(Cl)C2(Cl)C3C(Cl)C(Cl)CC3C1(Cl)C2(Cl)Cl",
+        "Cc1cccc2sc3nncn3c12",
+        "O=c1[nH]cnc2nc[nH]c12",
+        "CC(=O)C1CCC2C3CC=C4CC(O)CCC4(C)C3CCC12C",
+        "CN(C(=O)NC(C)(C)c1ccccc1)c1ccccc1",
+        "CC1=C(C(=O)Nc2ccccc2)SCCO1",
+        "c1ccc(N=Nc2ccccc2)cc1",
+        "Cc1c(F)c(F)c(COC(=O)C2C(C=C(Cl)C(F)(F)F)C2(C)C)c(F)c1F",
+        "C1=Cc2cccc3cccc1c23",
+        "O=C(c1ccccc1)c1ccccc1",
+        "NS(=O)(=O)c1cc2c(cc1C(F)(F)F)NC(Cc1ccccc1)NS2(=O)=O",
+        "c1ccc2c(c1)Cc1c-2ccc2ccccc12",
+        "OCC1OC(n2cnc3c(O)ncnc32)C(O)C1O",
+        "c1ccc2[nH]nnc2c1",
+        "CC12CCc3c(ccc4cc(O)ccc34)C1CCC2=O",
+        "O=C1CN(N=Cc2ccc([N+](=O)[O-])o2)C(=O)N1",
+        "CC=C(C(=CC)c1ccc(O)cc1)c1ccc(O)cc1",
+        "CCCC1COC(Cn2cncn2)(c2ccc(Cl)cc2Cl)O1",
+        "O=c1oc2ccccc2c(O)c1C(CC(O)c1ccc(-c2ccc(Br)cc2)cc1)c1ccccc1",
+        "COc1ccc(C(O)(c2cncnc2)C2CC2)cc1",
+        "CC(=O)SC1CC2=CC(=O)CCC2(C)C2CCC3(C)C(CCC34CCC(=O)O4)C12",
+        "OCC1OC(OC2C(CO)OC(O)C(O)C2O)C(O)C(O)C1O",
+        "COc1c2occc2cc2ccc(=O)oc12",
+        "OCc1ccccc1OC1OC(CO)C(O)C(O)C1O",
+        "c1ccc2c(c1)ccc1c2ccc2c3ccccc3ccc21",
+        "CC1=C(C(=O)Nc2ccccc2)CCCO1",
+        "COc1cc(C2c3cc4c(cc3C(OC3OC5COC(C)OC5C(O)C3O)C3COC(=O)C23)OCO4)cc(OC)c1O",
+        "c1ccc2c(c1)sc1ccccc12",
+        "CC12CCC3C(CCC4CC(O)CCC43C)C1CCC2=O",
+        "O=C1CCC(=O)N1",
+        "c1ccc2cc3cc4ccccc4cc3cc2c1",
+        "Cc1cc(C(=O)NNCc2ccccc2)no1",
+        "CC12CC(=O)C3C(CCC4=CC(=O)CCC43C)C1CCC2=O",
+        "O=c1oc2ccccc2c(O)c1C1CCCc2ccccc21",
+        "O=C(Nc1ccccc1)N(Cc1ccc(Cl)cc1)C1CCCC1",
+        "O=C1NC(=O)C2C3C(C(O)(c4ccccc4)c4ccccn4)=CC(C3=C(c3ccccc3)c3ccccn3)C12",
+        "CC1CCCCC1NC(=O)Nc1ccccc1",
+        "CN(C)C(=O)NC1CC2CC1C1CCCC21",
+        "CCOC(=O)c1ccccc1S(=O)(=O)NN(C=O)c1nc(Cl)cc(OC)n1",
+        "CCCC1C(=O)N2C(N(C)C)=Nc3ccc(C)cc3N2C1=O",
+        "CC(C)NC(=O)N1CC(=O)N(c2cc(Cl)cc(Cl)c2)C1=O",
+        "Cc1cc2nc3c(=O)[nH]c(=O)nc-3n(CC(O)C(O)C(O)CO)c2cc1C",
+        "CN1C(C(=O)Nc2ccccn2)=C(O)c2ccccc2S1(=O)=O",
+        "Cc1ccc(OP(=O)(Oc2cccc(C)c2)Oc2ccccc2C)cc1",
+        "O=C1CCC(N2C(=O)c3ccccc3C2=O)C(=O)N1",
+        "C#CC1(O)CCC2C3CCC4=Cc5oncc5CC4(C)C3CCC21C",
+        "N#CC(OC1OC(COC2OC(CO)C(O)C(O)C2O)C(O)C(O)C1O)c1ccccc1",
+        "CC12CCC3C(=CCc4cc(O)ccc43)C1CCC2=O",
+        "C1=CCCCCC1",
+        "O=C1NC(=O)C2C=CC=CC12",
+        "CC(C)CNC(=O)N1CCNC1=O",
+        "c1ccc2cnccc2c1",
+        "O=C1NC(=O)C2(CC2)C(=O)N1",
+        "O=C(Cn1ccnc1[N+](=O)[O-])NCc1ccccc1",
+        "c1ccc2c(c1)oc1ccccc12",
+        "O=C1NCCN1c1ncc([N+](=O)[O-])s1",
+        "CCN(Cc1c(F)cccc1Cl)c1c([N+](=O)[O-])cc(C(F)(F)F)cc1[N+](=O)[O-]",
+        "OC(c1ccc(Cl)cc1)(c1cncnc1)c1ccccc1Cl",
+        "Cc1cc(=O)[nH]c(=S)[nH]1",
+        "Nc1ncnc2c1ccn2C1OC(CO)C(O)C1O",
+        "Cc1ncc([N+](=O)[O-])n1CCO",
+        "c1ccc(Nc2ccccc2)cc1",
+        "O=C1c2ccccc2C(=O)c2ccccc21",
+        "O=C1C(O)=C(C2CCC(c3ccc(Cl)cc3)CC2)C(=O)c2ccccc21",
+        "Cc1ccc(N=CN(C)C=Nc2ccc(C)cc2C)c(C)c1",
+        "CC1(C)CON(Cc2ccccc2Cl)C1=O",
+        "CC12CCC3C(CCC4=CC(=O)CCC43C)C1CCC2=O",
+        "Cc1c2ccccc2c(C)c2c1ccc1ccccc12",
+        "CC1CO1",
+        "OC(Cn1cncn1)(Cn1cncn1)c1ccc(F)cc1F",
+        "O=C1NC(=O)C2(CCCCC2)C(=O)N1",
+        "CNC(=O)Oc1ccccc1C1OCCO1",
+        "OCC1OC(OC2(CO)OC(CO)C(O)C2O)C(O)C(O)C1O",
+        "CC12CCC3C(CC=C4CC(O)CCC43C)C1CCC2=O",
+        "c1ccc2c(c1)c1cccc3ccc4cccc2c4c31",
+        "COc1c2occc2c(OC)c2c(=O)cc(C)oc12",
+        "CC1CC(C)C(=O)C(C(O)CC2CC(=O)NC(=O)C2)C1",
+        "O=C1CSC(=S)N1",
+        "CCN1c2ncccc2C(=S)N(C)c2cccnc21",
+        "O=c1[nH]cnc2[nH]ncc12",
+        "Cc1nnc2n1-c1ccc(Cl)cc1C(c1ccccc1Cl)=NC2",
+        "O=C1C2CC=CCC2C(=O)N1SC(Cl)(Cl)C(Cl)Cl",
+        "CSc1nnc(C(C)(C)C)c(=O)n1N",
+        "NC(=O)c1cnccn1",
+        "O=C1CC(c2ccc(O)c(O)c2)Oc2cc(O)cc(O)c21",
+        "O=C1NC(=O)C(=O)C(=O)N1",
+        "COC(=O)Nc1nc2ccc(C(=O)c3ccccc3)cc2[nH]1",
+        "CC(=O)Nc1nnc(S(N)(=O)=O)s1",
+        "Nc1cc(N2CCCCC2)nc(N)[n+]1[O-]",
+        "c1ccc2ocnc2c1",
+        "ClC1=C(Cl)C2(Cl)C3C4CC(C5OC45)C3C1(Cl)C2(Cl)Cl"
+      ],
+      "train_extra": {
+        "config": {
+          "input_dim": 2048,
+          "hidden_dims": [
+            512,
+            256
+          ],
+          "dropout": 0.32036917602523796,
+          "use_batchnorm": true
+        },
+        "best_valid_rmse": 1.6178545951843262,
+        "best_epoch": 14,
+        "stopped_at": 34,
+        "history": [
+          {
+            "epoch": 1,
+            "train_loss": 0.8311910385313921,
+            "valid_rmse": 2.0622615814208984,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 2,
+            "train_loss": 0.3116072532110759,
+            "valid_rmse": 1.8241876363754272,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 3,
+            "train_loss": 0.2170690896796753,
+            "valid_rmse": 1.9316893815994263,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 4,
+            "train_loss": 0.18647888632363996,
+            "valid_rmse": 1.720333456993103,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 5,
+            "train_loss": 0.17102176233008087,
+            "valid_rmse": 1.8385531902313232,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 6,
+            "train_loss": 0.13171683832552505,
+            "valid_rmse": 1.6917698383331299,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 7,
+            "train_loss": 0.174101982812198,
+            "valid_rmse": 2.1212782859802246,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 8,
+            "train_loss": 0.1702375532965377,
+            "valid_rmse": 1.7594307661056519,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 9,
+            "train_loss": 0.1436074747050062,
+            "valid_rmse": 1.8527354001998901,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 10,
+            "train_loss": 0.13271556578551535,
+            "valid_rmse": 1.7172489166259766,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 11,
+            "train_loss": 0.11536214655016998,
+            "valid_rmse": 1.8022009134292603,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 12,
+            "train_loss": 0.11981740397007976,
+            "valid_rmse": 1.8832038640975952,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 13,
+            "train_loss": 0.14265382539351604,
+            "valid_rmse": 1.7686431407928467,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 14,
+            "train_loss": 0.18473813565153824,
+            "valid_rmse": 1.6178545951843262,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 15,
+            "train_loss": 0.1444943635687983,
+            "valid_rmse": 1.8483192920684814,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 16,
+            "train_loss": 0.14039763748178558,
+            "valid_rmse": 1.797615885734558,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 17,
+            "train_loss": 0.1169197266506321,
+            "valid_rmse": 1.7742204666137695,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 18,
+            "train_loss": 0.11023269392224602,
+            "valid_rmse": 1.9174878597259521,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 19,
+            "train_loss": 0.15745705813336347,
+            "valid_rmse": 1.9317697286605835,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 20,
+            "train_loss": 0.13618256487077454,
+            "valid_rmse": 1.7538481950759888,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 21,
+            "train_loss": 0.12480883473845372,
+            "valid_rmse": 1.7208538055419922,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 22,
+            "train_loss": 0.11427794118210556,
+            "valid_rmse": 1.795064091682434,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 23,
+            "train_loss": 0.1245408269836414,
+            "valid_rmse": 1.7781866788864136,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 24,
+            "train_loss": 0.10035676250499147,
+            "valid_rmse": 1.8220456838607788,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 25,
+            "train_loss": 0.11478197157032546,
+            "valid_rmse": 1.9199517965316772,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 26,
+            "train_loss": 0.10442492534372066,
+            "valid_rmse": 1.7648929357528687,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 27,
+            "train_loss": 0.08504920050685376,
+            "valid_rmse": 1.7723065614700317,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 28,
+            "train_loss": 0.08869145927201927,
+            "valid_rmse": 1.8219058513641357,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 29,
+            "train_loss": 0.08792863440390129,
+            "valid_rmse": 1.760082721710205,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 30,
+            "train_loss": 0.09900499967084353,
+            "valid_rmse": 1.8218120336532593,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 31,
+            "train_loss": 0.09638880778934227,
+            "valid_rmse": 1.8824462890625,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 32,
+            "train_loss": 0.07759420950829249,
+            "valid_rmse": 1.7650165557861328,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 33,
+            "train_loss": 0.09321781727177698,
+            "valid_rmse": 1.828797698020935,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 34,
+            "train_loss": 0.07614995233823044,
+            "valid_rmse": 1.8105560541152954,
+            "lr": 0.0015107822354839492
+          }
+        ]
+      }
+    },
+    {
+      "split": "test",
+      "RMSE": 1.4447333728208642,
+      "MAE": 1.1492917260617281,
+      "R2": 0.41089296227813277,
+      "seed": 1,
+      "train_size": 893,
+      "valid_size": 111,
+      "test_size": 113,
+      "test_smiles": [
+        "COc1c2occc2cc2ccc(=O)oc12",
+        "O=c1[nH]c2c(c(=O)n1C1CCCCC1)CCC2",
+        "O=C(OCC(O)CO)c1ccccc1Nc1ccnc2cc(Cl)ccc12",
+        "CCCOP(=S)(OCCC)SCC(=O)N1CCCCC1C",
+        "Nc1ncnc2c1ccn2C1OC(CO)C(O)C1O",
+        "OCC1OC(OC2(CO)OC(CO)C(O)C2O)C(O)C(O)C1O",
+        "COC1=CC(=O)CC(C)C12Oc1c(Cl)c(OC)cc(OC)c1C2=O",
+        "O=c1[nH]c(=O)c2[nH]c(=O)[nH]c2[nH]1",
+        "C1=CCC=CC1",
+        "CC12CCC3c4ccc(O)cc4CCC3C1CCC2=O",
+        "CNC(=O)Oc1ccccc1C1OCCO1",
+        "ClC1=C(Cl)C2(Cl)C3C(Cl)C(Cl)CC3C1(Cl)C2(Cl)Cl",
+        "CC12CC1(C)C(=O)N(c1cc(Cl)cc(Cl)c1)C2=O",
+        "Cc1cc(OC(=O)N(C)C)n(-c2ccccc2)n1",
+        "c1ccc2c(c1)[nH]c1ccccc12",
+        "c1ccc2[nH]nnc2c1",
+        "c1ccsc1",
+        "Cc1c(F)c(F)c(COC(=O)C2C(C=C(Cl)C(F)(F)F)C2(C)C)c(F)c1F",
+        "Cc1ncc([N+](=O)[O-])n1CCO",
+        "CC1Cc2ccccc2N1NC(=O)c1ccc(Cl)c(S(N)(=O)=O)c1",
+        "O=c1[nH]cnc2nc[nH]c12",
+        "CN(C(=O)NC(C)(C)c1ccccc1)c1ccccc1",
+        "C1=CCCCCC1",
+        "O=C1NC(=O)C2(CCCCC2)C(=O)N1",
+        "O=C1NC(=O)C(=O)N1",
+        "c1ccc2c3c(ccc2c1)-c1cccc2cccc-3c12",
+        "CCCCNC(=O)n1c(NC(=O)OC)nc2ccccc21",
+        "Nc1cc(N2CCCCC2)nc(N)[n+]1[O-]",
+        "COC(=O)Nc1nc2ccc(C(=O)c3ccccc3)cc2[nH]1",
+        "CC12CC(=O)C3C(CCC4=CC(=O)CCC43C)C1CCC2=O",
+        "O=C1C=C2CC3(O)COc4c(ccc(O)c4O)C3=C2C=C1O",
+        "CC(C)C(C(=O)OC(C#N)c1cccc(Oc2ccccc2)c1)c1ccc(OC(F)F)cc1",
+        "c1ccc2nc(-c3ccc4ccccc4n3)ccc2c1",
+        "Cc1ccc(N=CN(C)C=Nc2ccc(C)cc2C)c(C)c1",
+        "O=c1oc2ccccc2c(O)c1C1CCCc2ccccc21",
+        "CC(=O)SC1CC2=CC(=O)CCC2(C)C2CCC3(C)C(CCC34CCC(=O)O4)C12",
+        "O=Cc1ccc2c(c1)OCO2",
+        "ClC1(Cl)C2(Cl)C3(Cl)C4(Cl)C(Cl)(Cl)C5(Cl)C3(Cl)C1(Cl)C5(Cl)C24Cl",
+        "Cc1cccc2sc3nncn3c12",
+        "c1ccc2c(c1)c1cccc3ccc4cccc2c4c31",
+        "Cc1ccnc2c1NC(=O)c1cccnc1N2C1CC1",
+        "OCC1OC(OC2C(CO)OC(O)C(O)C2O)C(O)C(O)C1O",
+        "COC1=CC2OC3C=CC(O)=CC3C(=O)C2C(O)=C1",
+        "ClC(Cl)=C(c1ccc(Cl)cc1)c1ccc(Cl)cc1",
+        "CCC1(C2=CCCCC2)C(=O)NC(=O)NC1=O",
+        "O=c1[nH]cnc2[nH]ncc12",
+        "NC(=O)c1cnccn1",
+        "CN1C(C(=O)Nc2ccccn2)=C(O)c2ccccc2S1(=O)=O",
+        "O=C1C2CC=CCC2C(=O)N1SC(Cl)(Cl)C(Cl)Cl",
+        "CC(=O)C1CCC2C3CC=C4CC(O)CCC4(C)C3CCC12C",
+        "Cn1c(=O)on(-c2ccc(Cl)c(Cl)c2)c1=O",
+        "O=C1NC(=O)C2C=CC=CC12",
+        "O=C1CCCN1",
+        "COc1c2occc2c(OC)c2c(=O)cc(C)oc12",
+        "CSc1nnc(C(C)(C)C)c(=O)n1N",
+        "CCCC1C(=O)N2C(N(C)C)=Nc3ccc(C)cc3N2C1=O",
+        "O=C1CSC(=S)N1",
+        "c1cc2c3c(cccc3c1)CC2",
+        "O=C1CN(N=Cc2ccc([N+](=O)[O-])o2)C(=O)N1",
+        "Cc1ccc(OP(=O)(Oc2cccc(C)c2)Oc2ccccc2C)cc1",
+        "c1ccc2cnccc2c1",
+        "COc1cc2c(N)nc(N3CCN(C(=O)OCC(C)(C)O)CC3)nc2c(OC)c1OC",
+        "CCC1NC(=O)c2cc(S(N)(=O)=O)c(Cl)cc2N1",
+        "CC12CCC3C(CCC4=CC(=O)CCC43C)C1CCC2=O",
+        "O=C1OC(c2ccc(O)cc2)(c2ccc(O)cc2)c2ccccc21",
+        "NS(=O)(=O)c1cc2c(cc1Cl)N=CNS2(=O)=O",
+        "c1ccc(N=Nc2ccccc2)cc1",
+        "COc1cc(C2c3cc4c(cc3C(OC3OC5COC(C)OC5C(O)C3O)C3COC(=O)C23)OCO4)cc(OC)c1O",
+        "O=C(c1ccccc1)C(O)c1ccccc1",
+        "OCC1OC(OCC2OC(OC3(CO)OC(CO)C(O)C3O)C(O)C(O)C2O)C(O)C(O)C1O",
+        "OC(c1ccc(Cl)cc1)(c1cncnc1)c1ccccc1Cl",
+        "Cc1ccccc1N1C(=O)c2cc(S(N)(=O)=O)c(Cl)cc2NC1C",
+        "CN(C(=O)COc1nc2ccccc2s1)c1ccccc1",
+        "O=C1NCCN1c1ncc([N+](=O)[O-])s1",
+        "c1ccc2cc3cc4ccccc4cc3cc2c1",
+        "O=C(C=CC=Cc1ccc2c(c1)OCO2)N1CCCCC1",
+        "CCOC(=O)c1ccccc1S(=O)(=O)NN(C=O)c1nc(Cl)cc(OC)n1",
+        "O=C1NC(=O)C2(CCCC2)C(=O)N1",
+        "c1ccc(NNc2ccccc2)cc1",
+        "Nc1nc(N)c2nc(-c3ccccc3)c(N)nc2n1",
+        "CCN1c2ncccc2C(=S)N(C)c2cccnc21",
+        "c1ccc2c(c1)oc1ccccc12",
+        "C1=CCCC1",
+        "O=C1NC(=O)C2(CCCCCCC2)C(=O)N1",
+        "c1ccc2c(c1)sc1ccccc12",
+        "C=C(C)C1Cc2c(ccc3c2OC2COc4cc(OC)c(OC)cc4C2C3=O)O1",
+        "C1CCC2CCCCC2C1",
+        "c1ccc2c(c1)c1ccccc1c1ccccc21",
+        "Cc1cc(C(=O)NNCc2ccccc2)no1",
+        "CC12CCC3C(CCC4CC(=O)CCC43C)C1CCC2O",
+        "O=c1c(O)c(-c2ccc(O)cc2O)oc2cc(O)cc(O)c12",
+        "CCOc1ccc(C(C)(C)COCc2cccc(Oc3ccccc3)c2)cc1",
+        "COC1=C(OC)C2C(=O)OCC2C=C1",
+        "O=C(Nc1ccccc1)N(Cc1ccc(Cl)cc1)C1CCCC1",
+        "c1ccc2c(c1)CCN2",
+        "C#CC1(O)CCC2C3CCC4=Cc5oncc5CC4(C)C3CCC21C",
+        "OC(Cn1cncn1)(c1ccc(F)cc1)c1ccccc1F",
+        "Nc1nccs1",
+        "Clc1c(Cl)c(Cl)c2nccnc2c1Cl",
+        "C=CC1(C)OC(=O)N(c2cc(Cl)cc(Cl)c2)C1=O",
+        "O=C1CC(c2ccc(O)c(O)c2)Oc2cc(O)cc(O)c21",
+        "CC12CCC3C(CC=C4CC(O)CCC43C)C1CCC2=O",
+        "CCN1c2ccccc2C(=O)N(C)c2ccccc21",
+        "ClC1=C(Cl)C2(Cl)C3C4C=CC(C4)C3C1(Cl)C2(Cl)Cl",
+        "c1cc2ccc3cccc4ccc(c1)c2c34",
+        "O=C1C(O)=C(C2CCC(c3ccc(Cl)cc3)CC2)C(=O)c2ccccc21",
+        "O=C(Nc1ccccc1)Nc1ccccc1",
+        "O=C1CCC(N2C(=O)c3ccccc3C2=O)C(=O)N1",
+        "CC12CCc3c(ccc4cc(O)ccc34)C1CCC2=O",
+        "COC(=O)C1=C(C)NC(C)=C(C(=O)OC)C1c1ccccc1[N+](=O)[O-]",
+        "CC(C)NC(=O)N1CC(=O)N(c2cc(Cl)cc(Cl)c2)C1=O",
+        "O=CNC(N1C=CN(C(NC=O)C(Cl)(Cl)Cl)C=C1)C(Cl)(Cl)Cl",
+        "CC1=C2C3OC(=O)C(C)C3CCC2(C)C=CC1=O"
+      ],
+      "train_extra": {
+        "config": {
+          "input_dim": 2048,
+          "hidden_dims": [
+            512,
+            256
+          ],
+          "dropout": 0.32036917602523796,
+          "use_batchnorm": true
+        },
+        "best_valid_rmse": 1.48014235496521,
+        "best_epoch": 9,
+        "stopped_at": 29,
+        "history": [
+          {
+            "epoch": 1,
+            "train_loss": 0.7617289362035166,
+            "valid_rmse": 1.8030331134796143,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 2,
+            "train_loss": 0.33542808775204963,
+            "valid_rmse": 1.7446945905685425,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 3,
+            "train_loss": 0.24238507865124026,
+            "valid_rmse": 1.5144530534744263,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 4,
+            "train_loss": 0.19341373800697412,
+            "valid_rmse": 1.49519944190979,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 5,
+            "train_loss": 0.1954217158166185,
+            "valid_rmse": 1.6002123355865479,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 6,
+            "train_loss": 0.15286788152486988,
+            "valid_rmse": 1.5547436475753784,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 7,
+            "train_loss": 0.19602617149190166,
+            "valid_rmse": 1.7817320823669434,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 8,
+            "train_loss": 0.15164716461671293,
+            "valid_rmse": 1.5818109512329102,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 9,
+            "train_loss": 0.14121625101045693,
+            "valid_rmse": 1.48014235496521,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 10,
+            "train_loss": 0.13118985208525236,
+            "valid_rmse": 1.5540639162063599,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 11,
+            "train_loss": 0.12428901392094632,
+            "valid_rmse": 1.646060824394226,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 12,
+            "train_loss": 0.12652797945269278,
+            "valid_rmse": 1.6948606967926025,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 13,
+            "train_loss": 0.14607349186635096,
+            "valid_rmse": 1.6255797147750854,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 14,
+            "train_loss": 0.1405651259328857,
+            "valid_rmse": 1.6392083168029785,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 15,
+            "train_loss": 0.12737361594517313,
+            "valid_rmse": 1.692832350730896,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 16,
+            "train_loss": 0.13680889680230737,
+            "valid_rmse": 1.5161769390106201,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 17,
+            "train_loss": 0.13352293167409277,
+            "valid_rmse": 1.7141848802566528,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 18,
+            "train_loss": 0.10504709507473238,
+            "valid_rmse": 1.669295310974121,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 19,
+            "train_loss": 0.12356945725464474,
+            "valid_rmse": 1.5308148860931396,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 20,
+            "train_loss": 0.1499586732763993,
+            "valid_rmse": 1.705876111984253,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 21,
+            "train_loss": 0.10448352183233049,
+            "valid_rmse": 1.548980951309204,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 22,
+            "train_loss": 0.10581599009063716,
+            "valid_rmse": 1.6104846000671387,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 23,
+            "train_loss": 0.09518567749694373,
+            "valid_rmse": 1.6223948001861572,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 24,
+            "train_loss": 0.09504756549621483,
+            "valid_rmse": 1.5977696180343628,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 25,
+            "train_loss": 0.09271937436846577,
+            "valid_rmse": 1.6187331676483154,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 26,
+            "train_loss": 0.10556246797905657,
+            "valid_rmse": 1.6145882606506348,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 27,
+            "train_loss": 0.0951825337690976,
+            "valid_rmse": 1.653702735900879,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 28,
+            "train_loss": 0.09402369872186112,
+            "valid_rmse": 1.5616449117660522,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 29,
+            "train_loss": 0.09006142053098187,
+            "valid_rmse": 1.6041759252548218,
+            "lr": 0.0015107822354839492
+          }
+        ]
+      }
+    },
+    {
+      "split": "test",
+      "RMSE": 1.609102718728126,
+      "MAE": 1.2675944847005662,
+      "R2": 0.43815995535947116,
+      "seed": 2,
+      "train_size": 893,
+      "valid_size": 111,
+      "test_size": 113,
+      "test_smiles": [
+        "CC12CCC3C(CC=C4CC(O)CCC43C)C1CCC2=O",
+        "C1=CCC=CC1",
+        "c1ccc2cnccc2c1",
+        "c1ccc2cc3c(cc2c1)-c1cccc2cccc-3c12",
+        "Cc1c2ccccc2c(C)c2c1ccc1ccccc12",
+        "Cc1ccccc1-n1c(C)nc2ccccc2c1=O",
+        "c1ccc2c(c1)c1ccccc1c1ccccc21",
+        "COC(=O)C1=C(C)NC(C)=C(C(=O)OC)C1c1ccccc1[N+](=O)[O-]",
+        "O=C1C(O)=C(C2CCC(c3ccc(Cl)cc3)CC2)C(=O)c2ccccc21",
+        "CC12CCC3C(CCC4CC(=O)CCC43C)C1CCC2O",
+        "O=C1c2ccccc2Cc2ccccc2N1CCF",
+        "Nc1cc(N2CCCCC2)nc(N)[n+]1[O-]",
+        "CCN(Cc1c(F)cccc1Cl)c1c([N+](=O)[O-])cc(C(F)(F)F)cc1[N+](=O)[O-]",
+        "COc1cc2c(N)nc(N3CCN(C(=O)OCC(C)(C)O)CC3)nc2c(OC)c1OC",
+        "Nc1ncnc2c1ccn2C1OC(CO)C(O)C1O",
+        "OC(c1ccc(Cl)cc1)(c1cncnc1)c1ccccc1Cl",
+        "NC(=O)c1cnccn1",
+        "COC(=O)Nc1nc2ccc(C(=O)c3ccccc3)cc2[nH]1",
+        "O=C1C=C2CC3(O)COc4c(ccc(O)c4O)C3=C2C=C1O",
+        "c1ccc2cc3cc4ccccc4cc3cc2c1",
+        "O=c1oc2ccccc2c(O)c1C(CC(O)c1ccc(-c2ccc(Br)cc2)cc1)c1ccccc1",
+        "c1ccc2c(c1)-c1cccc3c1c-2cc1ccccc13",
+        "CC1COC2CC3(C)C(CC4C5C=C6CC(O)CCC6(C)CC5CCC43C)OC2C1",
+        "CC1Cc2ccccc2N1NC(=O)c1ccc(Cl)c(S(N)(=O)=O)c1",
+        "CN(C)C(=O)NC1CC2CC1C1CCCC21",
+        "ClC1=C(Cl)C2(Cl)C3C4CC(C5OC45)C3C1(Cl)C2(Cl)Cl",
+        "OC(Cn1cncn1)(Cn1cncn1)c1ccc(F)cc1F",
+        "c1ccc2c3c(ccc2c1)-c1cccc2cccc-3c12",
+        "O=C(C=CC=Cc1ccc2c(c1)OCO2)N1CCCCC1",
+        "c1ccc2ocnc2c1",
+        "O=Cc1ccc2c(c1)OCO2",
+        "O=C1NC(=O)C2(CC2)C(=O)N1",
+        "NS(=O)(=O)c1cc(C2(O)NC(=O)c3ccccc32)ccc1Cl",
+        "O=C1NC(=O)C2C=CC=CC12",
+        "CC12CCC3C(CCC4CC5SC5CC43C)C1CCC2O",
+        "Cc1ccc(N=CN(C)C=Nc2ccc(C)cc2C)c(C)c1",
+        "CN1C(C(=O)Nc2ccccn2)=C(O)c2ccccc2S1(=O)=O",
+        "CCOc1ccc(C(C)(C)COCc2cccc(Oc3ccccc3)c2)cc1",
+        "O=C1NC(=O)C2(CCCCCC2)C(=O)N1",
+        "O=CNC(N1C=CN(C(NC=O)C(Cl)(Cl)Cl)C=C1)C(Cl)(Cl)Cl",
+        "O=C(c1ccccc1)C(O)c1ccccc1",
+        "O=C1OC(c2ccc(O)cc2)(c2ccc(O)cc2)c2ccccc21",
+        "COc1c2occc2c(OC)c2c(=O)cc(C)oc12",
+        "Cc1ccnc2c1NC(=O)c1cccnc1N2C1CC1",
+        "O=C1NC(=O)C2(CCCCCCC2)C(=O)N1",
+        "O=C(OCC(O)CO)c1ccccc1Nc1ccnc2cc(Cl)ccc12",
+        "O=c1[nH]cnc2[nH]ncc12",
+        "O=c1[nH]cnc2nc[nH]c12",
+        "c1ccc2[nH]ncc2c1",
+        "O=C1CCCN1",
+        "COP(=S)(OC)Oc1ccc(Sc2ccc(OP(=S)(OC)OC)cc2)cc1",
+        "O=C1CCC(=O)N1",
+        "CN1CC(O)N(c2nnc(C(C)(C)C)s2)C1=O",
+        "O=C1NC(=O)C2(CCCC2)C(=O)N1",
+        "O=C(c1ccccc1)c1ccccc1",
+        "N#CC(OC1OC(COC2OC(CO)C(O)C(O)C2O)C(O)C(O)C1O)c1ccccc1",
+        "CCC(=C(CC)c1ccc(O)cc1)c1ccc(O)cc1",
+        "O=c1[nH]c(=O)c2[nH]c(=O)[nH]c2[nH]1",
+        "O=c1c(O)c(-c2ccc(O)cc2O)oc2cc(O)cc(O)c12",
+        "Cc1ncc([N+](=O)[O-])n1CCO",
+        "c1ccc(C2CO2)cc1",
+        "c1cc2ccc3ccc4ccc5ccc6ccc1c1c2c3c4c5c61",
+        "NS(=O)(=O)c1cc2c(cc1Cl)N=CNS2(=O)=O",
+        "O=C(Nc1ccccc1)N(Cc1ccc(Cl)cc1)C1CCCC1",
+        "CCC1(c2ccccc2)CCC(=O)NC1=O",
+        "OCc1ccccc1OC1OC(CO)C(O)C(O)C1O",
+        "O=C1NC(=O)C(=O)N1",
+        "c1ccc2nc(-c3ccc4ccccc4n3)ccc2c1",
+        "O=c1oc2ccccc2c(O)c1C1CCCc2ccccc21",
+        "c1ccc2c(c1)CCC2",
+        "CC1=C2C3OC(=O)C(C)C3CCC2(C)C=CC1=O",
+        "CCC1(C2=CCCCC2)C(=O)NC(=O)NC1=O",
+        "Cc1cc2nc3c(=O)[nH]c(=O)nc-3n(CC(O)C(O)C(O)CO)c2cc1C",
+        "OCC1OC(n2cnc3c(O)ncnc32)C(O)C1O",
+        "C=C(C)C1Cc2c(ccc3c2OC2COc4cc(OC)c(OC)cc4C2C3=O)O1",
+        "CN(C(=O)COc1nc2ccccc2s1)c1ccccc1",
+        "CN(C(=O)NC(C)(C)c1ccccc1)c1ccccc1",
+        "CCC1(c2ccccc2)C(=O)NCNC1=O",
+        "O=C1c2ccccc2C(=O)c2ccccc21",
+        "CCC(C)C(=O)OC1CC(C)C=C2C=CC(C)C(CCC3CC(O)CC(=O)O3)C21",
+        "O=C1NC(=O)C2(CCC2)C(=O)N1",
+        "Nc1nc(N)c2nc(-c3ccccc3)c(N)nc2n1",
+        "ClC1=C(Cl)C2(Cl)C3C4C=CC(C4)C3C1(Cl)C2(Cl)Cl",
+        "Cc1cc(C(=O)NNCc2ccccc2)no1",
+        "O=C1C(Cl)C(CCl)CN1c1cccc(C(F)(F)F)c1",
+        "ClC(Cl)=C(c1ccc(Cl)cc1)c1ccc(Cl)cc1",
+        "C=CC1(C)OC(=O)N(c2cc(Cl)cc(Cl)c2)C1=O",
+        "c1ccc2c(c1)cc1ccc3cccc4ccc2c1c34",
+        "COC1=C(OC)C2C(=O)OCC2C=C1",
+        "O=C1CN(N=Cc2ccc([N+](=O)[O-])o2)C(=O)N1",
+        "O=C(Cn1ccnc1[N+](=O)[O-])NCc1ccccc1",
+        "O=C1NC(=O)C2C3C(C(O)(c4ccccc4)c4ccccn4)=CC(C3=C(c3ccccc3)c3ccccn3)C12",
+        "ClC1=C(Cl)C(Cl)(C2(Cl)C(Cl)=C(Cl)C(Cl)=C2Cl)C(Cl)=C1Cl",
+        "O=C1NC(=O)C(=O)C(=O)N1",
+        "Cn1c(=O)on(-c2ccc(Cl)c(Cl)c2)c1=O",
+        "c1cc2c3c(cccc3c1)CC2",
+        "Nc1nccs1",
+        "CC=C(C(=CC)c1ccc(O)cc1)c1ccc(O)cc1",
+        "c1ccc2[nH]nnc2c1",
+        "O=c1[nH]c2c(c(=O)n1C1CCCCC1)CCC2",
+        "CC(=O)N(c1onc(C)c1C)S(=O)c1ccc(N)cc1",
+        "c1ccc2c(c1)oc1ccccc12",
+        "CCN1c2ccccc2N(C)C(=S)c2cccnc21",
+        "OC(Cn1cncn1)(c1ccc(F)cc1)c1ccccc1F",
+        "CNC(=O)Oc1ccccc1C1OCCO1",
+        "Cc1c(F)c(F)c(COC(=O)C2C(C=C(Cl)C(F)(F)F)C2(C)C)c(F)c1F",
+        "c1ccc(NNc2ccccc2)cc1",
+        "c1ccc2c(c1)sc1ccccc12",
+        "CCC1(C2=CCC3CCC2C3)C(=O)NC(=O)NC1=O",
+        "Cc1occc1C(=O)Nc1ccccc1",
+        "CC12CC1(C)C(=O)N(c1cc(Cl)cc(Cl)c1)C2=O",
+        "CC12CCC3C(=CCc4cc(O)ccc43)C1CCC2=O",
+        "CC(C)C(Nc1ccc(C(F)(F)F)cc1Cl)C(=O)OC(C#N)c1cccc(Oc2ccccc2)c1"
+      ],
+      "train_extra": {
+        "config": {
+          "input_dim": 2048,
+          "hidden_dims": [
+            512,
+            256
+          ],
+          "dropout": 0.32036917602523796,
+          "use_batchnorm": true
+        },
+        "best_valid_rmse": 1.363936185836792,
+        "best_epoch": 6,
+        "stopped_at": 26,
+        "history": [
+          {
+            "epoch": 1,
+            "train_loss": 0.6798702069920095,
+            "valid_rmse": 1.6760834455490112,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 2,
+            "train_loss": 0.3120450805893537,
+            "valid_rmse": 1.5395910739898682,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 3,
+            "train_loss": 0.2121890386501859,
+            "valid_rmse": 1.4387718439102173,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 4,
+            "train_loss": 0.24050340737233905,
+            "valid_rmse": 1.6878641843795776,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 5,
+            "train_loss": 0.15504015048534045,
+            "valid_rmse": 1.5935308933258057,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 6,
+            "train_loss": 0.17574767439656402,
+            "valid_rmse": 1.363936185836792,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 7,
+            "train_loss": 0.1975405216217041,
+            "valid_rmse": 1.6083022356033325,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 8,
+            "train_loss": 0.1665636695095433,
+            "valid_rmse": 1.3785245418548584,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 9,
+            "train_loss": 0.13370688968783398,
+            "valid_rmse": 1.4789074659347534,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 10,
+            "train_loss": 0.13611987460100103,
+            "valid_rmse": 1.5405676364898682,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 11,
+            "train_loss": 0.1357661982766725,
+            "valid_rmse": 1.4700729846954346,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 12,
+            "train_loss": 0.12131456086309866,
+            "valid_rmse": 1.547838807106018,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 13,
+            "train_loss": 0.1373253207057214,
+            "valid_rmse": 1.3978321552276611,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 14,
+            "train_loss": 0.14559932333424538,
+            "valid_rmse": 1.5616534948349,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 15,
+            "train_loss": 0.11709939355963021,
+            "valid_rmse": 1.5606111288070679,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 16,
+            "train_loss": 0.10954778641462326,
+            "valid_rmse": 1.512906789779663,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 17,
+            "train_loss": 0.1145788744208794,
+            "valid_rmse": 1.58486008644104,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 18,
+            "train_loss": 0.1202620937502531,
+            "valid_rmse": 1.5264489650726318,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 19,
+            "train_loss": 0.11075326971384339,
+            "valid_rmse": 1.4857776165008545,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 20,
+            "train_loss": 0.09626088091167063,
+            "valid_rmse": 1.6012754440307617,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 21,
+            "train_loss": 0.10582551181583362,
+            "valid_rmse": 1.6531671285629272,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 22,
+            "train_loss": 0.09604604394995886,
+            "valid_rmse": 1.6054810285568237,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 23,
+            "train_loss": 0.10274090371767323,
+            "valid_rmse": 1.573570728302002,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 24,
+            "train_loss": 0.09461334923413672,
+            "valid_rmse": 1.4832322597503662,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 25,
+            "train_loss": 0.08029386217623515,
+            "valid_rmse": 1.5042426586151123,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 26,
+            "train_loss": 0.09343427528959906,
+            "valid_rmse": 1.4867725372314453,
+            "lr": 0.0015107822354839492
+          }
+        ]
+      }
+    },
+    {
+      "split": "test",
+      "RMSE": 1.4328640587864556,
+      "MAE": 1.132785531904845,
+      "R2": 0.48170808614028826,
+      "seed": 3,
+      "train_size": 893,
+      "valid_size": 111,
+      "test_size": 113,
+      "test_smiles": [
+        "O=C(C=CC=Cc1ccc2c(c1)OCO2)N1CCCCC1",
+        "O=C(OCC(O)CO)c1ccccc1Nc1ccnc2cc(Cl)ccc12",
+        "CC12CCC3C(CCC4=CC(=O)CCC43C)C1CCC2=O",
+        "c1ccc2cnccc2c1",
+        "O=C1CN(N=Cc2ccc([N+](=O)[O-])o2)C(=O)N1",
+        "COc1ccc(C(O)(c2cncnc2)C2CC2)cc1",
+        "CC(C)C(C(=O)OC(C#N)c1cccc(Oc2ccccc2)c1)c1ccc(OC(F)F)cc1",
+        "O=c1[nH]cnc2[nH]ncc12",
+        "C#CC1(O)CCC2C3CCC4=Cc5oncc5CC4(C)C3CCC21C",
+        "CC1Cc2ccccc2N1NC(=O)c1ccc(Cl)c(S(N)(=O)=O)c1",
+        "C1=Cc2cccc3cccc1c23",
+        "CC12CCc3c(ccc4cc(O)ccc34)C1CCC2=O",
+        "CNC(=O)Oc1ccccc1C1OCCO1",
+        "CC1CC(C)C(=O)C(C(O)CC2CC(=O)NC(=O)C2)C1",
+        "COC1=CC2OC3C=CC(O)=CC3C(=O)C2C(O)=C1",
+        "CCC(C)C(=O)OC1CC(C)C=C2C=CC(C)C(CCC3CC(O)CC(=O)O3)C21",
+        "COc1cc2c(N)nc(N3CCN(C(=O)OCC(C)(C)O)CC3)nc2c(OC)c1OC",
+        "Cc1nnc2n1-c1ccc(Cl)cc1C(c1ccccc1Cl)=NC2",
+        "CCCC1C(=O)N2C(N(C)C)=Nc3ccc(C)cc3N2C1=O",
+        "O=C1OC(c2ccc(O)cc2)(c2ccc(O)cc2)c2ccccc21",
+        "ClC1=C(Cl)C2(Cl)C3C4C=CC(C4)C3C1(Cl)C2(Cl)Cl",
+        "Cc1c(F)c(F)c(COC(=O)C2C(C=C(Cl)C(F)(F)F)C2(C)C)c(F)c1F",
+        "O=C1c2ccccc2C(=O)c2ccccc21",
+        "C1CCC2CCCCC2C1",
+        "c1ccc2cc3cc4ccccc4cc3cc2c1",
+        "CCN1c2ccccc2C(=O)N(C)c2ccccc21",
+        "c1ccc2c(c1)CCC2",
+        "c1ccc2c(c1)c1cccc3ccc4cccc2c4c31",
+        "CC1CO1",
+        "C1=CCCC1",
+        "CC1(C)OC2CC3C4CCC5=CC(=O)C=CC5(C)C4(F)C(O)CC3(C)C2(C(=O)CO)O1",
+        "O=C(Nc1ccccc1)N(Cc1ccc(Cl)cc1)C1CCCC1",
+        "CCN(Cc1c(F)cccc1Cl)c1c([N+](=O)[O-])cc(C(F)(F)F)cc1[N+](=O)[O-]",
+        "O=C1CCC(=O)N1",
+        "N#CC(OC1OC(COC2OC(CO)C(O)C(O)C2O)C(O)C(O)C1O)c1ccccc1",
+        "CCC1(C2=CCCCC2)C(=O)NC(=O)NC1=O",
+        "CC(=O)SC1CC2=CC(=O)CCC2(C)C2CCC3(C)C(CCC34CCC(=O)O4)C12",
+        "O=C1CC(c2ccc(O)c(O)c2)Oc2cc(O)cc(O)c21",
+        "Cc1cc(C(=O)NNCc2ccccc2)no1",
+        "OC(c1ccc(Cl)cc1)(c1cncnc1)c1ccccc1Cl",
+        "CN(C)C(=O)NC1CC2CC1C1CCCC21",
+        "CC(=O)C1CCC2C3CC=C4CC(O)CCC4(C)C3CCC12C",
+        "CC(C)CNC(=O)N1CCNC1=O",
+        "COc1c2occc2c(OC)c2c(=O)cc(C)oc12",
+        "c1ccc2c3c(ccc2c1)-c1cccc2cccc-3c12",
+        "CCN1c2ccccc2N(C)C(=S)c2cccnc21",
+        "CC12CCC3C(CCC4CC(=O)CCC43C)C1CCC2O",
+        "Cc1cc2nc3c(=O)[nH]c(=O)nc-3n(CC(O)C(O)C(O)CO)c2cc1C",
+        "CCC(=C(CC)c1ccc(O)cc1)c1ccc(O)cc1",
+        "COP(=S)(OC)Oc1ccc(Sc2ccc(OP(=S)(OC)OC)cc2)cc1",
+        "OCC1OC(n2cnc3c(O)ncnc32)C(O)C1O",
+        "Cc1cccc2sc3nncn3c12",
+        "c1ccc(Nc2ccccc2)cc1",
+        "NS(=O)(=O)c1cc(C2(O)NC(=O)c3ccccc32)ccc1Cl",
+        "O=C1NC(=O)C2(CCCCC2)C(=O)N1",
+        "Cc1ccnc2c1NC(=O)c1cccnc1N2C1CC1",
+        "ClC1=C(Cl)C2(Cl)C3C4CC(C5OC45)C3C1(Cl)C2(Cl)Cl",
+        "O=C1CSC(=S)N1",
+        "Nc1cc(N2CCCCC2)nc(N)[n+]1[O-]",
+        "c1ccc(NNc2ccccc2)cc1",
+        "Nc1ncnc2c1ccn2C1OC(CO)C(O)C1O",
+        "c1ccc2c(c1)c1ccccc1c1ccccc21",
+        "CCN1c2ncccc2C(=S)N(C)c2cccnc21",
+        "O=C1CCC(N2C(=O)c3ccccc3C2=O)C(=O)N1",
+        "OCC1OC(OC2(CO)OC(CO)C(O)C2O)C(O)C(O)C1O",
+        "CC(=O)N(c1onc(C)c1C)S(=O)c1ccc(N)cc1",
+        "CC12CCC3C(CC=C4CC(O)CCC43C)C1CCC2=O",
+        "ClC(Cl)=C(c1ccc(Cl)cc1)c1ccc(Cl)cc1",
+        "CC1=C2C3OC(=O)C(C)C3CCC2(C)C=CC1=O",
+        "O=C(Cn1ccnc1[N+](=O)[O-])NCc1ccccc1",
+        "O=c1[nH]c(=O)c2[nH]c(=O)[nH]c2[nH]1",
+        "c1ccc2c(c1)-c1cccc3c1c-2cc1ccccc13",
+        "Nc1nc2[nH]cnc2c(=O)[nH]1",
+        "c1ccc(-c2ccc(-c3ccccc3)cc2)cc1",
+        "O=c1oc2ccccc2c(O)c1C(CC(O)c1ccc(-c2ccc(Br)cc2)cc1)c1ccccc1",
+        "c1ccc2c(c1)-c1cccc3cccc-2c13",
+        "COC1=C(OC)C2C(=O)OCC2C=C1",
+        "C=CC1(C)OC(=O)N(c2cc(Cl)cc(Cl)c2)C1=O",
+        "CSc1nnc(C(C)(C)C)c(=O)n1N",
+        "CC(=O)Nc1nnc(S(N)(=O)=O)s1",
+        "c1ccsc1",
+        "CC=C(C(=CC)c1ccc(O)cc1)c1ccc(O)cc1",
+        "c1ccc2c(c1)oc1ccccc12",
+        "c1ccc2c(c1)ccc1c2ccc2c3ccccc3ccc21",
+        "Clc1c(Cl)c(Cl)c2nccnc2c1Cl",
+        "O=C1NC(=O)C2(CC2)C(=O)N1",
+        "c1ccc2[nH]ncc2c1",
+        "OCc1ccccc1OC1OC(CO)C(O)C(O)C1O",
+        "c1ccc2c(c1)[nH]c1ccccc12",
+        "CC1COC2CC3(C)C(CC4C5C=C6CC(O)CCC6(C)CC5CCC43C)OC2C1",
+        "c1cc2c3c(cccc3c1)CC2",
+        "Cn1cc(-c2ccccc2)c(=O)c(-c2cccc(C(F)(F)F)c2)c1",
+        "c1ccc2cc3c(cc2c1)-c1cccc2cccc-3c12",
+        "O=C1NC(=O)C2C=CC=CC12",
+        "O=C1NC(=O)C2(CCCCCCC2)C(=O)N1",
+        "c1ccc2c(c1)cc1ccc3cccc4ccc2c1c34",
+        "CCCC1COC(Cn2cncn2)(c2ccc(Cl)cc2Cl)O1",
+        "CN(C(=O)COc1nc2ccccc2s1)c1ccccc1",
+        "O=C1NCCN1c1ncc([N+](=O)[O-])s1",
+        "COC(=O)Nc1nc2ccc(C(=O)c3ccccc3)cc2[nH]1",
+        "O=C1C(O)=C(C2CCC(c3ccc(Cl)cc3)CC2)C(=O)c2ccccc21",
+        "C1=CCCCCC1",
+        "OC(Cn1cncn1)(c1ccc(F)cc1)c1ccccc1F",
+        "CC(C)NC(=O)N1CC(=O)N(c2cc(Cl)cc(Cl)c2)C1=O",
+        "O=c1[nH]c2c(c(=O)n1C1CCCCC1)CCC2",
+        "OCC1OC(OCC2OC(OC3(CO)OC(CO)C(O)C3O)C(O)C(O)C2O)C(O)C(O)C1O",
+        "O=C1C2(Cl)C3(Cl)C4(Cl)C(Cl)(Cl)C5(Cl)C3(Cl)C1(Cl)C5(Cl)C24Cl",
+        "OC(Cn1cncn1)(Cn1cncn1)c1ccc(F)cc1F",
+        "ClC1(Cl)C2(Cl)C3(Cl)C4(Cl)C(Cl)(Cl)C5(Cl)C3(Cl)C1(Cl)C5(Cl)C24Cl",
+        "CC1=C(C(=O)Nc2ccccc2)SCCO1",
+        "O=C1NC(=O)C2C3C(C(O)(c4ccccc4)c4ccccn4)=CC(C3=C(c3ccccc3)c3ccccn3)C12",
+        "O=c1c(O)c(-c2ccc(O)cc2O)oc2cc(O)cc(O)c12",
+        "CN(C(=O)NC(C)(C)c1ccccc1)c1ccccc1"
+      ],
+      "train_extra": {
+        "config": {
+          "input_dim": 2048,
+          "hidden_dims": [
+            512,
+            256
+          ],
+          "dropout": 0.32036917602523796,
+          "use_batchnorm": true
+        },
+        "best_valid_rmse": 1.3683496713638306,
+        "best_epoch": 6,
+        "stopped_at": 26,
+        "history": [
+          {
+            "epoch": 1,
+            "train_loss": 0.7675840444821126,
+            "valid_rmse": 1.7865002155303955,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 2,
+            "train_loss": 0.33212904126486614,
+            "valid_rmse": 1.4535452127456665,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 3,
+            "train_loss": 0.23644576280942023,
+            "valid_rmse": 1.4589040279388428,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 4,
+            "train_loss": 0.20193094295456857,
+            "valid_rmse": 1.5445020198822021,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 5,
+            "train_loss": 0.16817278916397926,
+            "valid_rmse": 1.5558265447616577,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 6,
+            "train_loss": 0.17116768159230905,
+            "valid_rmse": 1.3683496713638306,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 7,
+            "train_loss": 0.14402039047051116,
+            "valid_rmse": 1.5195785760879517,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 8,
+            "train_loss": 0.15231390369165385,
+            "valid_rmse": 1.417718768119812,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 9,
+            "train_loss": 0.12811790043769733,
+            "valid_rmse": 1.6072229146957397,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 10,
+            "train_loss": 0.14671557908095545,
+            "valid_rmse": 1.6112648248672485,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 11,
+            "train_loss": 0.12851457112580372,
+            "valid_rmse": 1.5497430562973022,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 12,
+            "train_loss": 0.13534010821600911,
+            "valid_rmse": 1.5604010820388794,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 13,
+            "train_loss": 0.13545536344155484,
+            "valid_rmse": 1.5180054903030396,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 14,
+            "train_loss": 0.1637039432867377,
+            "valid_rmse": 1.6496862173080444,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 15,
+            "train_loss": 0.18140593490668666,
+            "valid_rmse": 1.4933593273162842,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 16,
+            "train_loss": 0.14805228365762504,
+            "valid_rmse": 1.554956078529358,
+            "lr": 0.0030215644709678984
+          },
+          {
+            "epoch": 17,
+            "train_loss": 0.120484694154372,
+            "valid_rmse": 1.7243424654006958,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 18,
+            "train_loss": 0.11769717462018783,
+            "valid_rmse": 1.6424797773361206,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 19,
+            "train_loss": 0.10474977466253792,
+            "valid_rmse": 1.622623085975647,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 20,
+            "train_loss": 0.11526376417809878,
+            "valid_rmse": 1.574012041091919,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 21,
+            "train_loss": 0.11086306587479015,
+            "valid_rmse": 1.5720850229263306,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 22,
+            "train_loss": 0.09650276569818529,
+            "valid_rmse": 1.6679015159606934,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 23,
+            "train_loss": 0.09355218229608867,
+            "valid_rmse": 1.6379019021987915,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 24,
+            "train_loss": 0.10379338600700941,
+            "valid_rmse": 1.6339448690414429,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 25,
+            "train_loss": 0.09952269674749151,
+            "valid_rmse": 1.6254467964172363,
+            "lr": 0.0015107822354839492
+          },
+          {
+            "epoch": 26,
+            "train_loss": 0.09013658800774565,
+            "valid_rmse": 1.6378785371780396,
+            "lr": 0.0015107822354839492
+          }
+        ]
+      }
+    }
+  ],
+  "aggregate": {
+    "RMSE_mean": 1.4357236805453328,
+    "RMSE_std": 0.10194670150828827,
+    "MAE_mean": 1.132888931443206,
+    "MAE_std": 0.0836344914620175,
+    "R2_mean": 0.4659430646636446,
+    "R2_std": 0.044917047295068735,
+    "n_seeds": 5
+  },
+  "best_params": {
+    "hidden_dims": [
+      512,
+      256
+    ],
+    "dropout": 0.32036917602523796,
+    "lr": 0.0030215644709678984,
+    "weight_decay": 2.3125519393338786e-05,
+    "batch_size": 32,
+    "use_batchnorm": true
+  },
+  "extra": {
+    "featurization": "morgan_fp_2048_radius2",
+    "descriptors_used": false,
+    "tuning_protocol": "scaffold_kfold_5_seed42",
+    "final_max_epochs": 200,
+    "final_patience": 20,
+    "cv_best_value": 1.6176087856292725,
+    "n_trials": 100,
+    "tuning_time_min": 7.2,
+    "fivessed_time_min": 0.25
+  }
+}
