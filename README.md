@@ -953,6 +953,11 @@ that reading:
   learns is too simple. This is also feature-class — Morgan cannot
   represent the chemical context of a substructure.
 
+(This reading is refined further in Phase 5, where the bias is shown to
+decompose into a *directional* component that responds to architecture
+and a *magnitude* component that does not — see
+[Phase 5](#phase-5--chemprop-d-mpnn-graph-representation).)
+
 The cleanest framing of Phase 5 (ChemProp) is therefore: **does graph
 representation simultaneously reduce both tails of the compression bias
 *and* resolve the polyol-aromatic hybrid case?** Quantitative target:
@@ -1016,7 +1021,7 @@ items #17 and #18.
 | Scaffold split (seed=42)        | 1.159             | 0.882             | +0.661             |
 | Scaffold split (5-seed mean)    | **1.148 ± 0.030** | **0.882 ± 0.021** | **+0.656 ± 0.036** |
 
-The aggregate sits between Phase 4 (1.436) and Phase 2 (1.062). It batte
+The aggregate sits between Phase 4 (1.436) and Phase 2 (1.062). It beats
 Phase 4 by a clear margin but **does not match** the hand-engineered
 tabular baselines:
 
@@ -1033,6 +1038,56 @@ descriptors **costs** at fixed model class. On a dataset of this size,
 the two are interchangeable; with a larger dataset, the graph would
 likely pull ahead. This is the cleanest empirical statement of the
 "feature-class vs model-class" question the project has been chasing.
+
+### Context in the literature
+
+The result that a tuned D-MPNN does not beat a tuned tabular model with
+global descriptors on a dataset of ~1k molecules is **consistent with
+recent independent benchmarking**, not an idiosyncrasy of this project:
+
+- **Jiang et al. (2021), *J. Cheminform.* 13:12** — systematic comparison
+  of 4 descriptor-based models (SVM, XGBoost, RF, DNN) vs 4 graph-based
+  models (GCN, GAT, MPNN, Attentive FP) on 11 MoleculeNet datasets with
+  multiple random splits. The descriptor-based models occupy the top three
+  ranks on **24 of 33 dataset×rank slots (73%)** and produce the best model
+  on 6 of 11 datasets — **ESOL explicitly among them**. SVM gives the best
+  test RMSE on ESOL (≈0.57 on random split). The authors' conclusion:
+  *"off-the-shelf descriptor-based models still can be directly employed
+  to accurately predict various chemical endpoints with excellent
+  computability and interpretability"*. Graph models pull ahead only on
+  larger or multi-task datasets.
+
+- **Notwell & Wood (2023), arXiv:2310.00174** — on the 22 TDC ADMET
+  benchmarks, gradient-boosted decision trees (CatBoost) with a
+  combination of ECFP + Avalon + ErG fingerprints plus 200 molecular
+  descriptors consistently match or outperform recently published GNN
+  methods. Adding a GNN-derived fingerprint as additional features
+  improves results further — a sign that graph and descriptor features
+  carry **complementary** information rather than the former subsuming
+  the latter.
+
+- **Broccatelli et al. (2021), arXiv:2111.13964** — Genentech/Roche
+  internal ADME datasets, four GNN variants (GCN, GAT, MPNN, AttentiveFP)
+  benchmarked against tabular baselines with whole-molecule descriptors.
+  All GNNs beat the fingerprints-only baseline; only GAT shows a small
+  but consistent improvement over the descriptor-augmented baseline.
+  MPNN — the architecture closest to ChemProp D-MPNN — does **not**
+  exceed the descriptor-augmented tabular model.
+
+This project's Phase 5 result on ESOL falls precisely in line with this
+literature: on a ~1k-molecule single-task regression target where global
+physicochemical descriptors are highly predictive of the endpoint
+(LogP/TPSA for solubility), 2D graph representations recover most but
+not all of the information descriptors carry. The 0.287 RMSE gap between
+P3 (XGB + descriptors) and P5 (ChemProp graph only) is the *quantitative
+measure* of that residual descriptor advantage on this dataset.
+
+The empirical regime in which graph representations are expected to
+outperform — larger datasets (>10k molecules), multi-task setups,
+endpoints less directly tied to bulk physicochemical properties — is
+exactly the territory of the planned follow-on projects (ADMET multi-task
+on TDC, ChEMBL kinase virtual screening), which makes ESOL Phase 5 a
+calibrated baseline rather than a negative result.
 
 ### Cross-seed stability
 
@@ -1260,23 +1315,43 @@ polyol-aromatic case as a genuinely 3D problem.
    about predicting often *are* the extremes.
 
 8. **Compression bias is a property of the featurization, not just of the
-   model.** Phase 3 showed mild compression as a side-effect of `reg_alpha`.
-   Phase 4 — completely different model class, completely different
-   regularization mechanism (dropout + BN + weight decay) — shows *worse*
-   compression on both tails. The bias is not what the model does to fit;
-   it is what the features cannot encode. Morgan FP captures qualitative
-   substructure presence, not quantitative extent (ring count, halogen
-   count, alkyl chain length), and the extremes of the logS distribution
-   are precisely governed by quantity. **Phase 5 refines this further.**
-   ChemProp's learned graph representation reduces the *directional*
-   compression bias (sign of mean residual) at both tails by 70-80%, but
-   the *magnitude* gap vs Phase 3 (tabular + descriptors) is exactly
-   matched by the gap P4 → P5 closes. The bias decomposes into two
+   model — and the literature agrees.** Phase 3 showed mild compression as a
+   side-effect of `reg_alpha`. Phase 4 — completely different model class,
+   completely different regularization mechanism (dropout + BN + weight
+   decay) — shows *worse* compression on both tails. The bias is not what
+   the model does to fit; it is what the features cannot encode. Morgan FP
+   captures qualitative substructure presence, not quantitative extent
+   (ring count, halogen count, alkyl chain length), and the extremes of the
+   logS distribution are precisely governed by quantity. **Phase 5 refines
+   this further.** ChemProp's learned graph representation reduces the
+   *directional* compression bias (sign of mean residual) at both tails by
+   70-80%, but the *magnitude* gap vs Phase 3 (tabular + descriptors) is
+   exactly matched by the gap P4 → P5 closes. The bias decomposes into two
    coupled components: a directional one that is partially expressivity-
    class (resolvable by better architecture), and a magnitude one that
    is feature-class (requires global descriptors). The polyol-aromatic
    case responds to neither, suggesting it is a 3D/solvation-class
    problem out of reach of 2D representations entirely.
+
+   This finding is **consistent with independent benchmarks in the
+   literature on small molecular datasets**. Jiang et al. (2021) compared
+   8 ML algorithms (4 descriptor-based, 4 graph-based) on 11 MoleculeNet
+   datasets and found that descriptor-based models give the best
+   predictions on 6 of 11 datasets — ESOL among them — and occupy 73% of
+   the top-3 ranks overall, concluding that *off-the-shelf descriptor-
+   based models still can be directly employed to accurately predict
+   various chemical endpoints*. Notwell & Wood (2023) reach the same
+   conclusion across the 22 TDC ADMET benchmarks, with the additional
+   observation that adding a GNN-derived fingerprint to a descriptor +
+   fingerprint baseline *further improves* performance — the
+   representations carry complementary, not redundant, information. The
+   ~1k-molecule regime is the regime in which this project sits, and the
+   ESOL-specific finding is therefore a calibrated instance of a
+   well-documented pattern, not an idiosyncrasy. The regime in which the
+   balance is expected to shift — larger datasets, multi-task setups,
+   endpoints less directly tied to bulk physicochemical properties — is
+   precisely the territory of the planned follow-on projects on TDC ADMET
+   and ChEMBL.
 
 9. **Stratified analysis must be paired with targeted sub-class
    diagnostics.** The Phase 4 aggregate hydrophilic residual of −0.67
@@ -1370,7 +1445,11 @@ The workflow now generalizes to follow-on projects:
   (likely GIN with edge features), since ChemProp v2's multi-task
   interface is more rigid than what is needed for exploratory work on
   heterogeneous label noise across tasks. The cheminformatics interview
-  standard.
+  standard. Notwell & Wood (2023) on the same TDC benchmarks set the
+  baseline to beat: their CatBoost + ECFP/Avalon/ErG + 200 descriptors
+  ensemble is the right *higher-bar* baseline (not the fingerprint-only
+  one), and a multi-task GNN should be compared against it head to head
+  rather than against a lower-bar straw man.
 - **Project 2 — Virtual screening** with GNNs on ChEMBL for a specific
   target (likely a kinase). Larger dataset (5k-50k molecules), where the
   ratio between graph representation's value and global descriptors'
@@ -1405,6 +1484,14 @@ The workflow now generalizes to follow-on projects:
   learning library. *NeurIPS* **2019**.
 - **Loshchilov, I.; Hutter, F.** Decoupled weight decay regularization
   (AdamW). *ICLR* **2019**.
+- **Jiang, D. et al.** Could graph neural networks learn better molecular
+  representation for drug discovery? A comparison study of descriptor-based
+  and graph-based models. *J. Cheminform.* **2021**, 13, 12.
+- **Notwell, J. H.; Wood, M. W.** ADMET property prediction through
+  combinations of molecular fingerprints. *arXiv:2310.00174* **2023**.
+- **Broccatelli, F. et al.** Benchmarking accuracy and generalizability of
+  four graph neural networks using large in vitro ADME datasets from
+  different chemical spaces. *arXiv:2111.13964* **2021**.
 
 ---
 
