@@ -8,3 +8,7 @@
 | P1 → P4 | -0.155 ± 0.055 | +0.122 ± 0.046 | 5/5 | 5/5 | tuned MLP vs untuned RF (Morgan-only both) |
 | P2 → P4 | +0.374 ± 0.140 | -0.239 ± 0.078 | 0/5 | 0/5 | MLP Morgan-only vs RF Morgan+desc |
 | P3 → P4 | +0.574 ± 0.105 | -0.341 ± 0.055 | 0/5 | 0/5 | MLP Morgan-only vs XGB Morgan+desc |
+| P4 → P5 | -0.287 ± 0.098 | +0.190 ± 0.056 | 5/5 | 5/5 | ChemProp D-MPNN vs MLP (both no global desc) |
+| P3 → P5 | +0.287 ± 0.042 | -0.151 ± 0.030 | 0/5 | 0/5 | ChemProp graph vs XGBoost Morgan+desc (best tabular) |
+| P2 → P5 | +0.087 ± 0.070 | -0.049 ± 0.041 | 1/5 | 1/5 | ChemProp graph vs RF Morgan+desc |
+| P1 → P5 | -0.442 ± 0.110 | +0.312 ± 0.066 | 5/5 | 5/5 | ChemProp vs untuned RF baseline |

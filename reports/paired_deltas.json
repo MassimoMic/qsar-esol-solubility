@@ -376,5 +376,257 @@
       "wins": 0,
       "n_seeds": 5
     }
+  },
+  "P4 \u2192 P5": {
+    "phase_a": "phase4",
+    "phase_b": "phase5",
+    "note": "ChemProp D-MPNN vs MLP (both no global desc)",
+    "rmse": {
+      "metric": "RMSE",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": -0.1842593011261029
+        },
+        {
+          "seed": 1,
+          "delta": -0.3174578758760114
+        },
+        {
+          "seed": 2,
+          "delta": -0.4583597635840033
+        },
+        {
+          "seed": 3,
+          "delta": -0.27356093376938473
+        },
+        {
+          "seed": 42,
+          "delta": -0.2029509986656124
+        }
+      ],
+      "mean_delta": -0.2873177746042229,
+      "std_delta": 0.09807327893621601,
+      "wins": 5,
+      "n_seeds": 5
+    },
+    "r2": {
+      "metric": "R2",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": 0.12100746741839552
+        },
+        {
+          "seed": 1,
+          "delta": 0.23045034844853052
+        },
+        {
+          "seed": 2,
+          "delta": 0.27449626350194545
+        },
+        {
+          "seed": 3,
+          "delta": 0.17901175098021627
+        },
+        {
+          "seed": 42,
+          "delta": 0.14636377771078757
+        }
+      ],
+      "mean_delta": 0.19026592161197506,
+      "std_delta": 0.05578588840934103,
+      "wins": 5,
+      "n_seeds": 5
+    }
+  },
+  "P3 \u2192 P5": {
+    "phase_a": "phase3",
+    "phase_b": "phase5",
+    "note": "ChemProp graph vs XGBoost Morgan+desc (best tabular)",
+    "rmse": {
+      "metric": "RMSE",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": 0.2408570831953203
+        },
+        {
+          "seed": 1,
+          "delta": 0.2893109945772122
+        },
+        {
+          "seed": 2,
+          "delta": 0.288700017665941
+        },
+        {
+          "seed": 3,
+          "delta": 0.2523556023881056
+        },
+        {
+          "seed": 42,
+          "delta": 0.3621418877557324
+        }
+      ],
+      "mean_delta": 0.28667311711646226,
+      "std_delta": 0.04238726895314767,
+      "wins": 0,
+      "n_seeds": 5
+    },
+    "r2": {
+      "metric": "R2",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": -0.1301687645858266
+        },
+        {
+          "seed": 1,
+          "delta": -0.160472025490069
+        },
+        {
+          "seed": 2,
+          "delta": -0.12609258348585084
+        },
+        {
+          "seed": 3,
+          "delta": -0.13163167516342777
+        },
+        {
+          "seed": 42,
+          "delta": -0.2043123608229721
+        }
+      ],
+      "mean_delta": -0.15053548190962926,
+      "std_delta": 0.02953066193429088,
+      "wins": 0,
+      "n_seeds": 5
+    }
+  },
+  "P2 \u2192 P5": {
+    "phase_a": "phase2",
+    "phase_b": "phase5",
+    "note": "ChemProp graph vs RF Morgan+desc",
+    "rmse": {
+      "metric": "RMSE",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": -0.010744840701897074
+        },
+        {
+          "seed": 1,
+          "delta": 0.09897185154209365
+        },
+        {
+          "seed": 2,
+          "delta": 0.14046286626928084
+        },
+        {
+          "seed": 3,
+          "delta": 0.027079644602028052
+        },
+        {
+          "seed": 42,
+          "delta": 0.17778204240573015
+        }
+      ],
+      "mean_delta": 0.08671031282344713,
+      "std_delta": 0.06983847908422108,
+      "wins": 1,
+      "n_seeds": 5
+    },
+    "r2": {
+      "metric": "R2",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": 0.0065464190827072555
+        },
+        {
+          "seed": 1,
+          "delta": -0.06021358275157118
+        },
+        {
+          "seed": 2,
+          "delta": -0.06586672603935351
+        },
+        {
+          "seed": 3,
+          "delta": -0.015665069248885333
+        },
+        {
+          "seed": 42,
+          "delta": -0.10940680473647235
+        }
+      ],
+      "mean_delta": -0.04892115273871502,
+      "std_delta": 0.040634478317122594,
+      "wins": 1,
+      "n_seeds": 5
+    }
+  },
+  "P1 \u2192 P5": {
+    "phase_a": "phase1",
+    "phase_b": "phase5",
+    "note": "ChemProp vs untuned RF baseline",
+    "rmse": {
+      "metric": "RMSE",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": -0.2863626441791296
+        },
+        {
+          "seed": 1,
+          "delta": -0.39873178506540974
+        },
+        {
+          "seed": 2,
+          "delta": -0.6223529578634217
+        },
+        {
+          "seed": 3,
+          "delta": -0.48143837339162965
+        },
+        {
+          "seed": 42,
+          "delta": -0.42168858555088096
+        }
+      ],
+      "mean_delta": -0.44211486921009435,
+      "std_delta": 0.11008195786653473,
+      "wins": 5,
+      "n_seeds": 5
+    },
+    "r2": {
+      "metric": "R2",
+      "per_seed_delta": [
+        {
+          "seed": 0,
+          "delta": 0.19605892029725225
+        },
+        {
+          "seed": 1,
+          "delta": 0.29859545738279514
+        },
+        {
+          "seed": 2,
+          "delta": 0.3948529124684447
+        },
+        {
+          "seed": 3,
+          "delta": 0.34030639511131133
+        },
+        {
+          "seed": 42,
+          "delta": 0.3297393774069569
+        }
+      ],
+      "mean_delta": 0.31191061253335206,
+      "std_delta": 0.06573053840386107,
+      "wins": 5,
+      "n_seeds": 5
+    }
   }
 }
