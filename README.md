@@ -40,6 +40,11 @@ networks.
 | 3   | Morgan FP + RDKit 2D descriptors        | XGBoost + Optuna     | **0.862 ± 0.026** | **0.807 ± 0.017** | ✅ done |
 | 4   | Morgan FP                                | MLP + Optuna (PyTorch) | 1.436 ± 0.102 | 0.466 ± 0.045 | ✅ done |
 | 5   | Molecular graph                          | ChemProp (D-MPNN) + Optuna | 1.148 ± 0.030 | 0.656 ± 0.036 | ✅ done |
+| 6*  | Additive [15-desc MLP + GNN]              | Custom (GCN/MPNN branches) | TBD | TBD | 🔄 in progress |
+
+\* Phase 6 runs on **AqSolDB** (9,982 molecules), not ESOL — not
+directly comparable row-by-row with Phases 1–5's 5-seed ESOL numbers.
+See [Next phases](#next-phases) for rationale.
 
 Headline numbers are 5-seed averages on balanced scaffold split, the most
 demanding of three evaluation protocols (see [Evaluation](#evaluation)).
@@ -112,6 +117,9 @@ on ChEMBL.
 
 ```
 qsar-esol-solubility/
+├── docs/
+│   └── phase6_design.md      # Phase 6 src/ module design (additive MLP+GNN
+│                              # on AqSolDB, pre-notebook design doc)
 ├── data/
 │   ├── raw/                  # ESOL as downloaded by DeepChem
 │   └── processed/
@@ -125,14 +133,19 @@ qsar-esol-solubility/
 │   ├── 05_chemprop_dmpnn_kaggle.ipynb            # Phase 5: ChemProp D-MPNN + Optuna (Kaggle)
 │   ├── 06_paired_deltas.ipynb                    # Cross-phase paired ΔRMSE / ΔR² report
 │   ├── 07_phase4_worst10_analysis.ipynb          # Phase 4 worst-10 RDKit identity audit
-│   └── 08_phase5_stratified.ipynb                # Phase 5 stratified residual analysis
+│   ├── 08_phase5_stratified.ipynb                # Phase 5 stratified residual analysis
+│   └── 09_aqsoldb_additive_gnn.ipynb             # Phase 6: additive MLP+GNN on AqSolDB (in progress)
 ├── src/                      # reusable infrastructure (Phase 4 onward)
 │   ├── splits.py                # scaffold_split_balanced, scaffold_kfold
 │   ├── featurization.py         # Morgan FP, RDKit descriptors, median imputer
+│   │                             # + chem-branch 15-descriptor subset (Phase 6)
 │   ├── metrics.py               # evaluate, aggregate_seed_runs
 │   ├── reporting.py             # JSON summaries, paired_delta
 │   ├── training.py              # PyTorch MLP + Optuna + 5-seed evaluator
-│   └── chemprop_training.py     # ChemProp v2 wrapper, drop-in compatible signature
+│   ├── chemprop_training.py     # ChemProp v2 wrapper, drop-in compatible signature
+│   ├── aqsoldb_curation.py      # AqSolDB loading, light curation (Phase 6)
+│   ├── graph_data.py            # SMILES → PyTorch Geometric Data (Phase 6)
+│   └── additive_model.py        # ChemicalBranch/StructuralBranch/Additive model (Phase 6)
 ├── models/                   # gitignored; model artifacts + saved best params
 ├── reports/
 │   ├── phase1_summary.json   # per-seed Phase 1 numbers (backfilled, lesson #14)
@@ -142,6 +155,7 @@ qsar-esol-solubility/
 │   ├── phase4_worst10.json   # verified worst-10 molecular identities for Phase 4
 │   ├── phase5_summary.json   # per-seed Phase 5 results + best hyperparameters + test predictions inline
 │   ├── phase5_stratified.json # Phase 5 regime/polyol breakdown + top-10 distinct
+│   ├── phase6_summary.json   # per-seed Phase 6 results (AqSolDB, planned)
 │   ├── paired_deltas.md      # auto-generated cross-phase Δ table (drop-in for this README)
 │   ├── paired_deltas.json    # auto-generated structured Δ data for downstream automation
 │   └── figures/              # parity plots, Optuna diagnostics, worst-10 grids
@@ -1428,7 +1442,11 @@ polyol-aromatic case as a genuinely 3D problem.
 
 ## Next phases
 
-The ESOL project is **complete** with Phase 5 (ChemProp D-MPNN). The
+The ESOL project (Phases 1–5, dataset: ESOL) is **complete**. A Phase 6
+extension is **in progress**, testing the open scaling question left by
+Phase 5 (see below) on a larger dataset (AqSolDB, 9,982 molecules) — not a
+new project, but a direct empirical follow-up to a hypothesis this project
+itself formulated. The
 five phases together produce one of the project's main findings:
 compression bias at the distribution extremes has a directional
 component (resolvable by switching from fingerprint to graph) and a
@@ -1436,6 +1454,16 @@ magnitude component (requires global descriptors), and the
 polyol-aromatic hybrid case responds to neither — likely a 3D/solvation
 problem out of reach of 2D representations. See the [Phase 5 section](#phase-5--chemprop-d-mpnn-graph-representation)
 above for the full interpretation.
+
+**Phase 6 — Additive MLP+GNN on AqSolDB (in progress).** Direct test of
+the Phase 5 closing statement — *"on a larger dataset, the graph would
+likely pull ahead"* — using an architecture that keeps chemical
+(descriptor-MLP) and structural (GNN) contributions separate and
+additive, following Bhattacharya & Roy (arXiv:2607.02212, 2026). Design
+doc: [`docs/phase6_design.md`](docs/phase6_design.md). Reuses
+`scaffold_split_balanced`, `evaluate_5seed_scaffold`, and the paired-delta
+reporting infrastructure unchanged; adds `src/aqsoldb_curation.py`,
+`src/graph_data.py`, `src/additive_model.py`.
 
 The workflow now generalizes to follow-on projects:
 
@@ -1470,6 +1498,9 @@ The workflow now generalizes to follow-on projects:
 - **Yang, K. et al.** Analyzing learned molecular representations for
   property prediction (ChemProp). *J. Chem. Inf. Model.* **2019**, 59,
   3370–3388.
+- **Bhattacharya, S.; Roy, A.** An additive MLP–GNN framework for
+  characterizing chemical and structural contributions to aqueous
+  solubility. *arXiv:2607.02212* **2026**.
 - **Bemis, G. W.; Murcko, M. A.** The properties of known drugs. 1.
   Molecular frameworks. *J. Med. Chem.* **1996**, 39, 2887–2893.
 - **Rogers, D.; Hahn, M.** Extended-connectivity fingerprints (ECFP).
