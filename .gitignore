@@ -1,6 +1,7 @@
 # Data files (regenerable from code)
 data/raw/
 data/processed/
+_README.md
 
 # Trained models and run artifacts
 *.pkl
