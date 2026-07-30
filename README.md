@@ -1528,5 +1528,4 @@ The workflow now generalizes to follow-on projects:
 
 ## License & contact
 
-Personal project, no specific license attached at this stage.
-For questions: open an issue on the repository.
+Code released under the MIT License. The ESOL dataset is from Delaney (2004), obtained via DeepChem; refer to the original sources for data terms.
